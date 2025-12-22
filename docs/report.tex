@@ -1,0 +1,90 @@
+\documentclass[11pt,twoside]{template-ubi/Styling}
+
+\usepackage{listings}
+\lstset{
+	language=C++,                % choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers=left,                   % where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           % adds a frame around the code
+	tabsize=2,          % sets default tabsize to 2 spaces
+	captionpos=b,           % sets the caption-position to bottom
+	breaklines=true,        % sets automatic line breaking
+	breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+% Comment this line if you are writing your thesis in English
+\portugues
+
+%%Para gerar índice remissivo (que será inserido no documento com o comando \printindex)
+\makeindex
+
+\thesistitle{Jogo de Labirinto 3D com OpenGL}
+% Se existir um sub-título, descomente a linha abaixo
+% \thesissubtitle{Implementação com Geração Procedural e Networking}
+
+%Nome da faculdade
+\facultyname{Engenharia}
+
+% Ciclo de estudos (1º, 2º ou 3º)
+\studiescyclenumber{1\textsuperscript{o}}
+
+\thesisauthors{Bruno Correia (51741), Henrique Laia (51742)}
+\thesistype{Relatório de Projeto de Computação Gráfica}
+\thesislocalanddate{Dezembro de 2025}
+
+\thesissupervisors{
+	Professores: Abel Gomes, João Dias\\
+}
+
+% Name of your course
+\thesiscourse{Engenharia Informática}
+
+% O comando seguinte insere o nome da tese no cabeçalho das páginas (comentar se não for pretendido)
+% (Pode ser o título abreviado)
+% \cabecalho{\thesistitlestr}
+
+\begin{document}
+
+% Abstract in Portuguese
+\thesisresumo{
+    Este projeto consiste no desenvolvimento de um jogo de labirinto 3D utilizando OpenGL como API gráfica principal. O jogo apresenta geração procedural de labirintos através do algoritmo de Kruskal, um sistema de iluminação dinâmica com efeito de lanterna, comunicação em rede entre dois jogadores (host e cliente) via sockets TCP, e renderização de texto para interface com o utilizador. O projeto demonstra a aplicação prática de conceitos fundamentais de computação gráfica, incluindo transformações 3D, iluminação, texturas, shaders GLSL, e gestão de cena.
+}{OpenGL, Computação Gráfica, Labirinto, Geração Procedural, Kruskal, GLFW, Shaders, Networking}
+
+
+\tableofcontents   % Índice
+\listoffigures     % Lista de Figuras    (Opcional)
+\listoftables      % Lista de Tabelas    (Opcional)
+% \listofalgorithms  % Lista de Algoritmos (Opcional)
+% \thesisacronyms{\input{Acronyms.tex}}  % Lista de Acrónimos  (Opcional)
+
+\mainmatter % inicia páginas em números arábicos a partir do 1
+
+% Os capítulos são inseridos a partir daqui
+\include{Introduction}
+\include{Technologies}
+\include{Implementation}
+\include{Conclusion}
+
+% Fim da inserção dos capítulos
+
+% Bibliografia
+% Primeiro parâmetro é o estilo e o segundo o arquivo bib
+%\thesisbibliography{template-ubi/BiblioStyle}{bibliography}
+
+% Exemplo de uso de outro estilo bibliográfico. Define ser definido apenas um estilo
+\thesisbibliography{template-ubi/IEEEtran}{bibliography}
+
+% \appendix{\input{Appendix.tex}} % Anexos (Opcional)
+% \thesisglossary{\input{Glossary.tex}}  % Glossário (Opcional)
+
+\printindex % Inserir índice remissivo (Opcional)
+
+\end{document}

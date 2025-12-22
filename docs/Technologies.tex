@@ -1,0 +1,98 @@
+\chapter{Tecnologias Utilizadas} \label{chap:tecnologias}
+
+Este capítulo descreve as tecnologias, bibliotecas e ferramentas utilizadas no desenvolvimento do jogo de labirinto 3D.
+
+\section{OpenGL} \label{sec:tech_opengl}
+O \textbf{OpenGL} (Open Graphics Library) \cite{OpenGL} é a API gráfica principal utilizada neste projeto. Trata-se de uma API multiplataforma para renderização de gráficos 2D e 3D, amplamente utilizada na indústria de jogos e aplicações gráficas.
+
+O projeto utiliza OpenGL moderno (versão 3.3+) com um \textit{pipeline} programável, permitindo o uso de shaders personalizados para controlo total sobre a renderização. As principais funcionalidades do OpenGL utilizadas incluem:
+
+\begin{itemize}
+    \item \textbf{Vertex Buffer Objects (VBO)}: Para armazenamento eficiente de dados de vértices na GPU.
+    \item \textbf{Vertex Array Objects (VAO)}: Para gestão de estado de atributos de vértices.
+    \item \textbf{Shaders GLSL}: Programas executados na GPU para processamento de vértices e fragmentos.
+    \item \textbf{Texturas}: Mapeamento de imagens em superfícies 3D para realismo visual.
+    \item \textbf{Depth Testing}: Para renderização correta de objetos com base na profundidade.
+\end{itemize}
+
+\section{GLFW} \label{sec:tech_glfw}
+A biblioteca \textbf{GLFW} \cite{GLFW} é utilizada para gestão de janelas, contextos OpenGL e processamento de entrada (teclado e rato). GLFW é uma biblioteca leve e portável que simplifica a criação de aplicações OpenGL multiplataforma.
+
+Principais funcionalidades utilizadas:
+\begin{itemize}
+    \item Criação e gestão de janela de renderização
+    \item Inicialização de contexto OpenGL
+    \item Gestão de eventos de entrada (teclado, rato, movimento de rato)
+    \item Controlo de cursor (normal/escondido para modo de jogo)
+\end{itemize}
+
+\section{GLM} \label{sec:tech_glm}
+A biblioteca \textbf{GLM} (OpenGL Mathematics) \cite{GLM} fornece funcionalidades matemáticas essenciais para programação gráfica 3D. GLM implementa tipos e operações compatíveis com GLSL, facilitando a transferência de dados entre CPU e GPU.
+
+Funcionalidades utilizadas:
+\begin{itemize}
+    \item Vetores 3D (\texttt{glm::vec3}) para posições, direções e cores
+    \item Matrizes 4x4 (\texttt{glm::mat4}) para transformações
+    \item Funções de transformação: \texttt{translate}, \texttt{rotate}, \texttt{scale}
+    \item Projeção perspectiva (\texttt{glm::perspective})
+    \item Cálculos trigonométricos e normalização de vetores
+\end{itemize}
+
+\section{GLAD} \label{sec:tech_glad}
+O \textbf{GLAD} é um carregador de extensões OpenGL que gere a obtenção de ponteiros para funções OpenGL. É necessário porque as funções OpenGL modernas não estão disponíveis diretamente no sistema operativo, devendo ser carregadas em tempo de execução.
+
+\section{FreeType} \label{sec:tech_freetype}
+A biblioteca \textbf{FreeType} \cite{FreeType} é utilizada para renderização de texto na interface do jogo. FreeType permite o carregamento de fontes TrueType e a geração de texturas de caracteres para renderização em OpenGL.
+
+No projeto, FreeType é utilizado para:
+\begin{itemize}
+    \item Renderização do diálogo introdutório
+    \item Mensagens de estado do jogo
+    \item Interface de utilizador
+\end{itemize}
+
+\section{STB Image} \label{sec:tech_stb}
+A biblioteca \textbf{STB Image} \cite{STBImage} é uma biblioteca de cabeçalho único (\textit{header-only}) para carregamento de imagens em diversos formatos (PNG, JPEG, etc.). É utilizada para carregar as texturas aplicadas às paredes, chão e ambiente exterior do labirinto.
+
+\section{CMake} \label{sec:tech_cmake}
+O sistema de construção \textbf{CMake} \cite{CMake} é utilizado para gestão da compilação do projeto. CMake permite definir dependências, configurar opções de compilação e gerar ficheiros de projeto para diferentes sistemas operativos e IDEs.
+
+O projeto está configurado para gerar dois executáveis distintos:
+\begin{itemize}
+    \item \texttt{maze\_host.exe}: Versão host/servidor
+    \item \texttt{maze\_client.exe}: Versão cliente
+\end{itemize}
+
+\section{Sockets TCP} \label{sec:tech_sockets}
+Para a comunicação em rede entre o host e o cliente, o projeto utiliza \textbf{sockets TCP} POSIX. Esta escolha permite comunicação fiável entre processos através de uma interface de programação standard disponível em sistemas Unix-like.
+
+\section{Resumo de Bibliotecas} \label{sec:tech_resumo}
+
+A Tabela \ref{tab:bibliotecas} resume todas as bibliotecas externas utilizadas e os seus propósitos.
+
+\begin{table}[H]
+    \centering
+    \caption{Bibliotecas externas utilizadas no projeto.}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Biblioteca} & \textbf{Propósito} \\
+        \hline
+        OpenGL & API gráfica para renderização 3D \\
+        \hline
+        GLFW & Gestão de janela e entrada \\
+        \hline
+        GLM & Matemática 3D (vetores, matrizes, transformações) \\
+        \hline
+        GLAD & Carregamento de extensões OpenGL \\
+        \hline
+        FreeType & Renderização de texto \\
+        \hline
+        STB Image & Carregamento de texturas (PNG, JPEG) \\
+        \hline
+        CMake & Sistema de construção multiplataforma \\
+        \hline
+        Sockets TCP & Comunicação em rede host/cliente \\
+        \hline
+    \end{tabular}
+    \label{tab:bibliotecas}
+\end{table}

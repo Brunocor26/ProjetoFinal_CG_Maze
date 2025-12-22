@@ -1,0 +1,50 @@
+\xpginauxfiletrue 
+\selectlanguage *[variant=portuguese]{portuguese}
+\contentsline {chapter}{Resumo}{iii}{section*.1}%
+\contentsline {chapter}{Índice}{v}{section*.3}%
+\contentsline {chapter}{Lista de Figuras}{vii}{section*.5}%
+\contentsline {chapter}{Lista de Tabelas}{ix}{section*.7}%
+\contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}História e Enquadramento}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Motivação}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Objetivos}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Estrutura do Relatório}{2}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Tecnologias Utilizadas}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}OpenGL}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}GLFW}{3}{section.2.2}%
+\contentsline {section}{\numberline {2.3}GLM}{4}{section.2.3}%
+\contentsline {section}{\numberline {2.4}GLAD}{4}{section.2.4}%
+\contentsline {section}{\numberline {2.5}FreeType}{4}{section.2.5}%
+\contentsline {section}{\numberline {2.6}STB Image}{5}{section.2.6}%
+\contentsline {section}{\numberline {2.7}CMake}{5}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Sockets TCP}{5}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Resumo de Bibliotecas}{5}{section.2.9}%
+\contentsline {chapter}{\numberline {3}Desenvolvimento e Implementação}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Gestão do Projeto}{7}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Estrutura de Diretórios}{7}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Sistema de Compilação}{7}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Descrição do Código}{8}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Classe Game}{8}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Classe Maze}{8}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Classe Camera}{9}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Classe Shader}{9}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Geração de Labirinto: Algoritmo de Kruskal}{9}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Classe TextRenderer}{10}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Classe Mesh}{10}{subsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.2.8}Módulo Network}{10}{subsection.3.2.8}%
+\contentsline {section}{\numberline {3.3}Funcionalidades Implementadas}{11}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Geração Procedural de Labirintos}{11}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Sistema de Iluminação Dinâmica}{11}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Networking Host/Cliente}{11}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Sistema de Diálogo Introdutório}{12}{subsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.3.5}Ambiente Exterior}{12}{subsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.3.6}Deteção de Colisões}{12}{subsection.3.3.6}%
+\contentsline {subsection}{\numberline {3.3.7}Sistema de Pausa}{12}{subsection.3.3.7}%
+\contentsline {subsection}{\numberline {3.3.8}Texturas e Materiais}{13}{subsection.3.3.8}%
+\contentsline {section}{\numberline {3.4}Documentação com Doxygen}{13}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Conclusão e Trabalho Futuro}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Conclusão}{15}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}O que se Fez}{15}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}Limitações e Trabalho Não Realizado}{16}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Trabalho Futuro}{16}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Considerações Finais}{17}{section.4.4}%

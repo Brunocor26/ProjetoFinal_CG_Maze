@@ -1,0 +1,228 @@
+\chapter{Desenvolvimento e Implementação} \label{chap:implementacao}
+
+Este capítulo descreve a gestão do projeto, a arquitetura do código, e as principais funcionalidades implementadas.
+
+\section{Gestão do Projeto} \label{sec:impl_gestao}
+
+\subsection{Estrutura de Diretórios}
+O projeto está organizado da seguinte forma:
+
+\begin{itemize}
+    \item \texttt{src/}: Código fonte C++ (.cpp)
+    \item \texttt{include/}: Ficheiros de cabeçalho (.h, .hpp)
+    \item \texttt{shaders/}: Shaders GLSL (vertex e fragment shaders)
+    \item \texttt{assets/}: Recursos (texturas, fontes)
+    \item \texttt{build/}: Diretório de compilação (gerado pelo CMake)
+    \item \texttt{docs/}: Documentação do projeto
+\end{itemize}
+
+\subsection{Sistema de Compilação}
+O projeto utiliza CMake para gestão da compilação. O ficheiro \texttt{CMakeLists.txt} define:
+
+\begin{itemize}
+    \item Dependências externas (GLFW, FreeType, OpenGL)
+    \item Dois executáveis distintos: \texttt{maze\_host.exe} e \texttt{maze\_client.exe}
+    \item Ficheiros fonte comuns partilhados entre ambos os executáveis
+    \item Comandos personalizados para cópia de shaders e assets para o diretório de compilação
+\end{itemize}
+
+A separação em dois executáveis permite executar o jogo em modo host e cliente simultaneamente para testar funcionalidades de rede.
+
+\section{Descrição do Código} \label{sec:impl_codigo}
+
+\subsection{Classe Game}
+A classe \texttt{Game} é o núcleo da aplicação, responsável pela gestão do ciclo de vida do jogo. Localizada em \texttt{src/Game.cpp} e \texttt{include/Game.h}, implementa os seguintes métodos principais:
+
+\begin{itemize}
+    \item \texttt{Init()}: Inicialização de recursos (shaders, geometria, texturas, rede)
+    \item \texttt{ProcessInput(float dt)}: Processamento de entrada do teclado e rato
+    \item \texttt{Update(float dt)}: Lógica do jogo (networking, deteção de proximidade ao portal)
+    \item \texttt{Render()}: Renderização da cena 3D
+    \item \texttt{ProcessMouseMovement()}: Controlo de câmara com o rato
+    \item \texttt{CheckPortalProximity()}: Verificação de proximidade ao portal de saída
+\end{itemize}
+
+A classe gere também o estado do jogo incluindo:
+\begin{itemize}
+    \item Modo de jogo (HOST ou CLIENT)
+    \item Estado de pausa
+    \item Estado do diálogo introdutório
+    \item Bloqueio de movimento (para modo cliente)
+    \item Sockets de rede para comunicação
+\end{itemize}
+
+\subsection{Classe Maze}
+A classe \texttt{Maze} (\texttt{src/Maze.cpp}, \texttt{include/Maze.h}) é responsável pela representação e renderização do labirinto. Principais funcionalidades:
+
+\begin{itemize}
+    \item \texttt{Generate(int width, int height)}: Gera um novo labirinto utilizando o algoritmo de Kruskal
+    \item \texttt{Draw(Shader \&shader)}: Renderiza paredes e chão do labirinto
+    \item \texttt{IsWall(float x, float z)}: Deteção de colisões com paredes
+    \item Armazena a grelha do labirinto (matriz 2D de inteiros)
+    \item Gere os \textit{meshes} de parede e chão
+\end{itemize}
+
+\subsection{Classe Camera}
+A classe \texttt{Camera} (\texttt{include/learnopengl/camera.h}) implementa uma câmara em primeira pessoa com os seguintes recursos:
+
+\begin{itemize}
+    \item Movimento WASD para navegação
+    \item Rotação da câmara com o rato
+    \item Cálculo de matriz de visualização (\textit{view matrix})
+    \item Vetores direcionais (frente, direita, cima)
+    \item Campo de visão ajustável (\textit{zoom})
+\end{itemize}
+
+\subsection{Classe Shader}
+A classe \texttt{Shader} (\texttt{include/Shader.h}) encapsula a gestão de programas shader GLSL:
+
+\begin{itemize}
+    \item Carregamento e compilação de vertex e fragment shaders
+    \item Linking de programa shader
+    \item Métodos utilitários para definição de uniformes (matrizes, vetores, valores escalares)
+    \item Validação de erros de compilação
+\end{itemize}
+
+\subsection{Geração de Labirinto: Algoritmo de Kruskal}
+A classe \texttt{maze::kruskal} (\texttt{include/kruksal/kruksal.cpp}) implementa o algoritmo de Kruskal para geração procedural de labirintos perfeitos (sem ciclos).
+
+\textbf{Nota de Atribuição}: A implementação do algoritmo de Kruskal foi adaptada do repositório de Ferenc Nemeth \cite{MazeAlgorithms}, que fornece implementações de referência de vários algoritmos de geração de labirintos em C++.
+
+\textbf{Funcionamento do algoritmo}:
+\begin{enumerate}
+    \item Inicializa cada célula como um conjunto disjunto
+    \item Cria lista de todas as paredes possíveis entre células adjacentes
+    \item Baralha aleatoriamente a lista de paredes
+    \item Para cada parede:
+    \begin{itemize}
+        \item Se as células adjacentes pertencem a conjuntos diferentes
+        \item Remove a parede
+        \item Une os conjuntos
+    \end{itemize}
+    \item Continua até que todas as células pertençam ao mesmo conjunto
+\end{enumerate}
+
+Este método garante que existe sempre um caminho único entre quaisquer dois pontos do labirinto.
+
+\subsection{Classe TextRenderer}
+A classe \texttt{TextRenderer} (\texttt{src/TextRenderer.cpp}) utiliza FreeType para renderização de texto:
+
+\begin{itemize}
+    \item \texttt{Load(std::string font, unsigned int fontSize)}: Carrega fonte TrueType
+    \item \texttt{RenderText()}: Renderiza texto 2D sobre a cena 3D
+    \item Gera texturas de caracteres dinamicamente
+    \item Utiliza projeção ortográfica para renderização 2D
+\end{itemize}
+
+\subsection{Classe Mesh}
+A classe \texttt{Mesh} (\texttt{include/Mesh.hpp}) encapsula geometria 3D:
+
+\begin{itemize}
+    \item Armazena vértices (posição, normal, coordenadas de textura)
+    \item Gere VAO, VBO para renderização eficiente
+    \item Suporta múltiplas texturas (difusa, normal, rugosidade)
+    \item Método \texttt{Draw()} para renderização
+\end{itemize}
+
+\subsection{Módulo Network}
+As funções de networking (\texttt{src/network.cpp}, \texttt{include/Network.h}) implementam comunicação TCP:
+
+\begin{itemize}
+    \item \texttt{createSocket()}: Cria socket TCP
+    \item \texttt{bindAndListen()}: Inicia servidor (modo host)
+    \item \texttt{acceptConnection()}: Aceita ligação de cliente
+    \item \texttt{connectToServer()}: Liga ao servidor (modo cliente)
+    \item \texttt{sendData()}, \texttt{receiveData()}: Transferência de dados
+    \item \texttt{closeSocket()}: Encerramento de ligação
+\end{itemize}
+
+\section{Funcionalidades Implementadas} \label{sec:impl_funcionalidades}
+
+\subsection{Geração Procedural de Labirintos}
+Cada execução do jogo gera um labirinto único através do algoritmo de Kruskal. O tamanho do labirinto é configurável (atualmente 15x15 células).
+
+\subsection{Sistema de Iluminação Dinâmica}
+O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/spotlight}) através de shaders GLSL customizados:
+
+\begin{itemize}
+    \item \textbf{Spotlight}: A luz segue a posição e direção da câmara
+    \item \textbf{Atenuação}: Diminuição gradual da intensidade luminosa com a distância
+    \item \textbf{Ângulos de corte}: Controlo do cone de luz (ângulo interno e externo)
+    \item \textbf{Fog Effect}: Névoa atmosférica que esconde geometria distante
+\end{itemize}
+
+O vertex shader (\texttt{shaders/maze\_vs.glsl}) transforma vértices e calcula posições para iluminação. O fragment shader (\texttt{shaders/maze\_fs.glsl}) implementa o modelo de iluminação de Phong modificado com características de spotlight.
+
+\subsection{Networking Host/Cliente}
+O jogo suporta dois modos de execução:
+
+\textbf{Modo HOST}:
+\begin{itemize}
+    \item Inicia servidor TCP na porta 8080
+    \item Aguarda ligação de cliente
+    \item Ao atingir o portal, envia mensagem "UNLOCK" ao cliente
+    \item Permite movimento livre desde o início
+\end{itemize}
+
+\textbf{Modo CLIENT}:
+\begin{itemize}
+    \item Liga ao servidor host (127.0.0.1:8080)
+    \item Movimento bloqueado até receber mensagem "UNLOCK"
+    \item Após desbloqueio, pode navegar até ao próprio portal
+    \item Apresenta sequência de fim ao atingir portal
+\end{itemize}
+
+\subsection{Sistema de Diálogo Introdutório}
+Ao iniciar o jogo, é apresentado um diálogo com:
+\begin{itemize}
+    \item Mensagem de boas-vindas
+    \item Indicação do modo de jogo (HOST/CLIENT)
+    \item Objetivo do jogo
+    \item Controlos disponíveis
+    \item Instrução para pressionar ENTER e iniciar
+\end{itemize}
+
+Durante a apresentação do diálogo, a entrada de movimento é ignorada.
+
+\subsection{Ambiente Exterior}
+Para além do labirinto, o jogo inclui:
+
+\begin{itemize}
+    \item \textbf{Plano de relva}: Superfície texturizada que estende 10 células além do labirinto
+    \item \textbf{Árvores procedurais}: Árvores simples compostas por tronco (cilindro) e copa (pirâmide)
+    \item \textbf{Portal de saída}: Estrutura arquitetônica com dois pilares e arco semicircular
+\end{itemize}
+
+\subsection{Deteção de Colisões}
+O sistema de colisões verifica:
+\begin{itemize}
+    \item Interseção do jogador com paredes do labirinto
+    \item Movimento é bloqueado em direções que causariam colisão
+    \item Permite movimento deslizante ao longo de paredes
+\end{itemize}
+
+\subsection{Sistema de Pausa}
+Pressionando a tecla ESC:
+\begin{itemize}
+    \item O jogo pausa/despausa
+    \item Cursor do rato torna-se visível (modo pausa)
+    \item Movimento e rotação da câmara são bloqueados
+\end{itemize}
+
+\subsection{Texturas e Materiais}
+O jogo utiliza texturas PBR (Physically-Based Rendering) de alta qualidade (4K):
+
+\begin{itemize}
+    \item \textbf{Paredes}: Textura de tijolos (Bricks101) com mapas de cor, normal e rugosidade
+    \item \textbf{Chão}: Textura de pedras pavimentadas (PavingStones138)
+    \item \textbf{Exterior}: Textura de relva (Grass005)
+\end{itemize}
+
+\section{Documentação com Doxygen} \label{sec:impl_doxygen}
+O código está parcialmente documentado com comentários compatíveis com Doxygen. A classe \texttt{maze::kruskal} contém documentação Doxygen completa. Para gerar documentação HTML:
+
+\begin{lstlisting}[language=bash]
+doxygen Doxyfile
+\end{lstlisting}
+
+\textbf{Nota}: A documentação Doxygen completa para todas as classes é um objetivo de trabalho futuro.

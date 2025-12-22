@@ -1,0 +1,38 @@
+\chapter{Introdução}\footnote{Este relatório foi produzido utilizando o template \LaTeX\ para teses e dissertações da Universidade da Beira Interior \cite{template-ubi-latex}, uma versão não oficial mantida pela comunidade.} \label{chap:intro}
+
+\section{História e Enquadramento} \label{sec:intro_historia}
+O jogador vê-se num labirinto, com uma lanterna que ilumina o seu caminho e uma citação pouco escalerecedora. Percebe que a mesma pessoa que vai sair dali, não é a mesma que entrou.
+
+\section{Motivação} \label{sec:intro_motivacao}
+A escolha de desenvolver um jogo de labirinto 3D foi motivada por diversos fatores:
+
+\begin{itemize}
+    \item \textbf{Geração Procedural}: Implementar algoritmos de geração procedural, nomeadamente o algoritmo de Kruskal, permite criar labirintos únicos e imprevisíveis em cada execução.
+    \item \textbf{Aplicação de Computação Gráfica}: O projeto requer a aplicação prática de transformações 3D, sistemas de iluminação, mapeamento de texturas, e programação de shaders GLSL.
+    \item \textbf{Interatividade}: A implementação de controlos de câmara em primeira pessoa e deteção de colisões proporciona uma experiência imersiva.
+    \item \textbf{Networking}: A inclusão de funcionalidades de rede (modo host/cliente) adiciona complexidade técnica e demonstra conhecimentos de programação de sistemas.
+    \item \textbf{Desafios Técnicos}: O projeto apresenta desafios interessantes em áreas como otimização de renderização, gestão de recursos, e arquitetura de software.
+\end{itemize}
+
+\section{Objetivos} \label{sec:intro_objetivos}
+Os principais objetivos deste projeto são:
+
+\begin{itemize}
+    \item Desenvolver um motor de renderização 3D funcional utilizando OpenGL.
+    \item Implementar geração procedural de labirintos através do algoritmo de Kruskal.
+    \item Criar um sistema de iluminação dinâmica com efeito de lanterna (\textit{flashlight/spotlight}).
+    \item Implementar comunicação em rede entre dois jogadores (modo host e cliente).
+    \item Desenvolver sistema de camera em primeira pessoa com controlos intuitivos.
+    \item Adicionar elementos visuais como ambiente exterior, árvores e portal de saída.
+    \item Implementar renderização de texto para interface com o utilizador.
+    \item Aplicar texturas e materiais realistas aos elementos do jogo.
+\end{itemize}
+
+\section{Estrutura do Relatório} \label{sec:intro_estrutura}
+Este relatório está organizado da seguinte forma:
+
+\begin{itemize}
+    \item O \textbf{Capítulo \ref{chap:tecnologias}} descreve as tecnologias e bibliotecas utilizadas no desenvolvimento do projeto.
+    \item O \textbf{Capítulo \ref{chap:implementacao}} detalha o desenvolvimento e implementação, incluindo a gestão do projeto, descrição das classes e funções principais.
+    \item O \textbf{Capítulo \ref{chap:conclusao}} apresenta as conclusões, trabalho realizado, limitações e sugestões para trabalho futuro.
+\end{itemize}
