@@ -125,10 +125,24 @@ CMakeFiles/maze.dir/src/Objloader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/maze.dir/src/Objloader.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp -o CMakeFiles/maze.dir/src/Objloader.cpp.s
 
+CMakeFiles/maze.dir/src/network.cpp.o: CMakeFiles/maze.dir/flags.make
+CMakeFiles/maze.dir/src/network.cpp.o: /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp
+CMakeFiles/maze.dir/src/network.cpp.o: CMakeFiles/maze.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/maze.dir/src/network.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/maze.dir/src/network.cpp.o -MF CMakeFiles/maze.dir/src/network.cpp.o.d -o CMakeFiles/maze.dir/src/network.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp
+
+CMakeFiles/maze.dir/src/network.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/maze.dir/src/network.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp > CMakeFiles/maze.dir/src/network.cpp.i
+
+CMakeFiles/maze.dir/src/network.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/maze.dir/src/network.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp -o CMakeFiles/maze.dir/src/network.cpp.s
+
 CMakeFiles/maze.dir/src/glad.c.o: CMakeFiles/maze.dir/flags.make
 CMakeFiles/maze.dir/src/glad.c.o: /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c
 CMakeFiles/maze.dir/src/glad.c.o: CMakeFiles/maze.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/maze.dir/src/glad.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/maze.dir/src/glad.c.o"
 	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/maze.dir/src/glad.c.o -MF CMakeFiles/maze.dir/src/glad.c.o.d -o CMakeFiles/maze.dir/src/glad.c.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c
 
 CMakeFiles/maze.dir/src/glad.c.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/maze.dir/src/glad.c.s: cmake_force
 CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o: CMakeFiles/maze.dir/flags.make
 CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o: /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp
 CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o: CMakeFiles/maze.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o -MF CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o.d -o CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp
 
 CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.s: cmake_force
 CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o: CMakeFiles/maze.dir/flags.make
 CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o: /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp
 CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o: CMakeFiles/maze.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o -MF CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o.d -o CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp
 
 CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.i: cmake_force
@@ -173,6 +187,7 @@ maze_OBJECTS = \
 "CMakeFiles/maze.dir/src/Game.cpp.o" \
 "CMakeFiles/maze.dir/src/Maze.cpp.o" \
 "CMakeFiles/maze.dir/src/Objloader.cpp.o" \
+"CMakeFiles/maze.dir/src/network.cpp.o" \
 "CMakeFiles/maze.dir/src/glad.c.o" \
 "CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o" \
 "CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o"
@@ -184,6 +199,7 @@ maze.exe: CMakeFiles/maze.dir/src/main.cpp.o
 maze.exe: CMakeFiles/maze.dir/src/Game.cpp.o
 maze.exe: CMakeFiles/maze.dir/src/Maze.cpp.o
 maze.exe: CMakeFiles/maze.dir/src/Objloader.cpp.o
+maze.exe: CMakeFiles/maze.dir/src/network.cpp.o
 maze.exe: CMakeFiles/maze.dir/src/glad.c.o
 maze.exe: CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o
 maze.exe: CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o
@@ -192,7 +208,7 @@ maze.exe: /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
 maze.exe: /usr/lib/x86_64-linux-gnu/libGLX.so
 maze.exe: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 maze.exe: CMakeFiles/maze.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable maze.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable maze.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/maze.dir/link.txt --verbose=$(VERBOSE)
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold "Copying shaders directory..."
 	/usr/bin/cmake -E copy_directory /home/bruno/Desktop/3Ano/CG/ProjetoFinal/shaders /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/shaders

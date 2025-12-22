@@ -1,5 +1,5 @@
 #include "../include/Game.h"
-#include "../include/Objloader.hpp"
+#include "../include/Network.h"
 #include "../include/Shader.h"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,9 +14,13 @@ Mesh *floor_mesh;
 
 unsigned int loadTexture(char const *path);
 
-Game::Game(unsigned int width, unsigned int height)
+Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
     : Width(width), Height(height), currentMaze(nullptr), camera(nullptr),
-      outdoorGroundMesh(nullptr), treeMesh(nullptr), gateMesh(nullptr) {
+      outdoorGroundMesh(nullptr), treeMesh(nullptr), gateMesh(nullptr),
+      networkSocket(-1), connectedToPortal(false), portalPosition(0.0f),
+      isPaused(false), windowPtr(nullptr), mode(gameMode),
+      movementLocked(gameMode == GameMode::CLIENT), serverSocket(-1),
+      clientSocket(-1) {
   for (int i = 0; i < 1024; i++)
     Keys[i] = false;
 }
@@ -30,9 +34,50 @@ Game::~Game() {
   delete outdoorGroundMesh;
   delete treeMesh;
   delete gateMesh;
+
+  // Close network connections
+  if (networkSocket >= 0) {
+    Network::closeSocket(networkSocket);
+  }
+  if (serverSocket >= 0) {
+    Network::closeSocket(serverSocket);
+  }
+  if (clientSocket >= 0) {
+    Network::closeSocket(clientSocket);
+  }
 }
 
 void Game::Init() {
+  // Network initialization based on mode
+  if (mode == GameMode::HOST) {
+    std::cout << "\n===== HOST MODE =====" << std::endl;
+    // Create server socket
+    serverSocket = Network::createSocket();
+    if (serverSocket >= 0) {
+      if (Network::bindAndListen(serverSocket, 8080)) {
+        std::cout << "✓ Server listening on port 8080" << std::endl;
+        std::cout << "Waiting for client connection..." << std::endl;
+      } else {
+        std::cerr << "✗ Failed to start server" << std::endl;
+      }
+    }
+  } else {
+    std::cout << "\n===== CLIENT MODE =====" << std::endl;
+    std::cout << "⚠ MOVEMENT LOCKED - Waiting for host to reach portal"
+              << std::endl;
+    // Create client socket
+    networkSocket = Network::createSocket();
+    if (networkSocket >= 0) {
+      std::cout << "Connecting to host at 127.0.0.1:8080..." << std::endl;
+      if (Network::connectToServer(networkSocket, "127.0.0.1", 8080)) {
+        std::cout << "✓ Connected to host!" << std::endl;
+      } else {
+        std::cerr << "✗ Failed to connect to host" << std::endl;
+      }
+    }
+  }
+  std::cout << "=====================\n" << std::endl;
+
   // 1. Camera - Start higher and looking down to ensure visibility
   camera = new Camera(glm::vec3(15.0f, 20.0f, 15.0f),
                       glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -89.0f);
@@ -465,6 +510,11 @@ end_loop_init:
 
   gateMesh = new Mesh(portalVertices, {}, {});
   std::cout << "Procedural portal created successfully!" << std::endl;
+
+  // Store portal position for proximity detection
+  portalPosition =
+      glm::vec3(currentMaze->endParams.x * currentMaze->cellSize, 0.0f,
+                currentMaze->endParams.y * currentMaze->cellSize);
 }
 
 unsigned int loadTexture(char const *path) {
@@ -515,6 +565,36 @@ bool CheckCollision(glm::vec3 targetPos, Maze *maze) {
 }
 
 void Game::ProcessInput(float dt) {
+  // Handle ESC key for pause/unpause
+  static bool escPressedLastFrame = false;
+  bool escPressed = Keys[GLFW_KEY_ESCAPE];
+
+  if (escPressed && !escPressedLastFrame && windowPtr) {
+    // Toggle pause
+    isPaused = !isPaused;
+
+    if (isPaused) {
+      // Show cursor
+      glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+      std::cout << "Game PAUSED. Press ESC to resume." << std::endl;
+    } else {
+      // Hide cursor
+      glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      std::cout << "Game RESUMED." << std::endl;
+    }
+  }
+  escPressedLastFrame = escPressed;
+
+  // Don't process movement if paused
+  if (isPaused) {
+    return;
+  }
+
+  // CLIENT MODE: Don't allow movement until unlocked
+  if (mode == GameMode::CLIENT && movementLocked) {
+    return;
+  }
+
   // Current Position
   glm::vec3 currentPos = camera->Position;
   glm::vec3 nextPos = currentPos;
@@ -559,11 +639,55 @@ void Game::ProcessInput(float dt) {
 
 void Game::ProcessMouseMovement(float xoffset, float yoffset,
                                 bool constrainPitch) {
+  if (isPaused) {
+    return; // Don't process mouse movement when paused
+  }
   camera->ProcessMouseMovement(xoffset, yoffset, constrainPitch);
 }
 
 void Game::Update(float dt) {
-  // Logic updates here
+  // HOST MODE: Accept client connection if not already connected
+  if (mode == GameMode::HOST && serverSocket >= 0 && clientSocket < 0) {
+    // Non-blocking accept check
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(serverSocket, &readfds);
+    struct timeval tv = {0, 0}; // No wait
+
+    if (select(serverSocket + 1, &readfds, NULL, NULL, &tv) > 0) {
+      clientSocket = Network::acceptConnection(serverSocket);
+      if (clientSocket >= 0) {
+        std::cout << "✓ Client connected!" << std::endl;
+      }
+    }
+  }
+
+  // CLIENT MODE: Check for unlock message
+  if (mode == GameMode::CLIENT && movementLocked && networkSocket >= 0) {
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(networkSocket, &readfds);
+    struct timeval tv = {0, 0}; // Non-blocking
+
+    if (select(networkSocket + 1, &readfds, NULL, NULL, &tv) > 0) {
+      char buffer[256];
+      ssize_t bytesRead =
+          Network::receiveData(networkSocket, buffer, sizeof(buffer) - 1);
+      if (bytesRead > 0) {
+        buffer[bytesRead] = '\0';
+        std::string message(buffer);
+
+        if (message.find("UNLOCK") != std::string::npos) {
+          movementLocked = false;
+          std::cout << "\n*** UNLOCKED! You can now move! ***" << std::endl;
+          std::cout << "Navigate to the portal to win!\n" << std::endl;
+        }
+      }
+    }
+  }
+
+  // Check if player is near portal
+  CheckPortalProximity();
 }
 
 void Game::Render() {
@@ -646,5 +770,56 @@ void Game::Render() {
     gameShader->setMat4("model", glm::value_ptr(gateModel));
     gameShader->setVec3("objectColor", 0.3f, 0.6f, 0.9f); // Glowing cyan portal
     gateMesh->Draw(gameShader->ID);
+  }
+}
+
+void Game::CheckPortalProximity() {
+  if (!camera || connectedToPortal) {
+    return; // Already connected or no camera
+  }
+
+  // Calculate distance to portal
+  float distance = glm::distance(camera->Position, portalPosition);
+  float proximityThreshold = 2.0f; // Trigger when within 2 units
+
+  if (distance < proximityThreshold) {
+    if (mode == GameMode::HOST) {
+      // HOST MODE: Send unlock message to client
+      std::cout << "\n=== PORTAL REACHED ===" << std::endl;
+      std::cout << "You have reached the portal!" << std::endl;
+
+      // Pause game and show cursor
+      isPaused = true;
+      if (windowPtr) {
+        glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+      }
+
+      std::cout << "Game PAUSED at portal." << std::endl;
+      std::cout << "Press ESC to resume and continue exploring." << std::endl;
+
+      // Send unlock message to client
+      if (clientSocket >= 0) {
+        const char *unlockMsg = "UNLOCK";
+        Network::sendData(clientSocket, unlockMsg, strlen(unlockMsg));
+        std::cout << "✓ Sent UNLOCK signal to client!" << std::endl;
+      } else {
+        std::cout << "⚠ No client connected to unlock." << std::endl;
+      }
+
+      connectedToPortal = true;
+    } else {
+      // CLIENT MODE: Victory message
+      std::cout << "\n=== YOU WIN! ===" << std::endl;
+      std::cout << "Congratulations! You reached the portal!" << std::endl;
+
+      // Pause game
+      isPaused = true;
+      if (windowPtr) {
+        glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+      }
+
+      std::cout << "Press ESC to resume or close the window." << std::endl;
+      connectedToPortal = true;
+    }
   }
 }

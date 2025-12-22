@@ -11,53 +11,75 @@ list(APPEND CMAKE_PREFIX_PATH /opt/homebrew /opt/homebrew/lib/cmake)
 find_package(glfw3 REQUIRED)
 
 # ==========================================
-# Target: maze.exe
+# Shared source files
 # ==========================================
-# We include the .cpp files found in include/kruksal here so they compile
-add_executable(maze
-    src/main.cpp
+set(COMMON_SOURCES
     src/Game.cpp
     src/Maze.cpp
     src/Objloader.cpp
-    src/glad.c                      # Ensure this file exists!
+    src/network.cpp
+    src/glad.c
     include/kruksal/kruksal.cpp
     include/kruksal/maze_generator.cpp
+)
+
+# ==========================================
+# Target: maze_host.exe (HOST MODE)
+# ==========================================
+add_executable(maze_host
+    src/main_host.cpp
+    ${COMMON_SOURCES}
+)
+
+set_target_properties(maze_host PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    OUTPUT_NAME "maze_host.exe"
+)
+
+# ==========================================
+# Target: maze_client.exe (CLIENT MODE)
+# ==========================================
+add_executable(maze_client
+    src/main_client.cpp
+    ${COMMON_SOURCES}
+)
+
+set_target_properties(maze_client PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    OUTPUT_NAME "maze_client.exe"
 )
 
 # Configure the root directory header (for finding assets)
 configure_file(configuration/root_directory.h.in configuration/root_directory.h)
 
-# Include directories
-target_include_directories(maze PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_BINARY_DIR}/configuration
-)
-
-# Libraries Linking
-target_link_libraries(maze PRIVATE dl)
-target_link_libraries(maze PRIVATE glfw)
-
-if (APPLE)
-    target_compile_definitions(maze PRIVATE GL_SILENCE_DEPRECATION)
-    target_link_libraries(maze PRIVATE "-framework OpenGL")
-elseif (WIN32)
-    target_link_libraries(maze PRIVATE opengl32)
-else()
-    find_package(OpenGL REQUIRED)
-    target_link_libraries(maze PRIVATE OpenGL::GL)
-endif()
-
-set_target_properties(maze PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_NAME "maze.exe"
-)
+# Include directories (apply to both targets)
+foreach(target maze_host maze_client)
+    target_include_directories(${target} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/configuration
+    )
+    
+    # Libraries Linking
+    target_link_libraries(${target} PRIVATE dl)
+    target_link_libraries(${target} PRIVATE glfw)
+    
+    if (APPLE)
+        target_compile_definitions(${target} PRIVATE GL_SILENCE_DEPRECATION)
+        target_link_libraries(${target} PRIVATE "-framework OpenGL")
+    elseif (WIN32)
+        target_link_libraries(${target} PRIVATE opengl32)
+    else()
+        find_package(OpenGL REQUIRED)
+        target_link_libraries(${target} PRIVATE OpenGL::GL)
+    endif()
+endforeach()
 
 # ==========================================
 # Custom Commands (Assets & Shaders)
 # ==========================================
 
-# 1. Copy the SHADERS folder
-add_custom_command(TARGET maze POST_BUILD
+# 1. Copy the SHADERS folder for both targets
+add_custom_command(TARGET maze_host POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/shaders
     ${CMAKE_BINARY_DIR}/shaders
@@ -65,8 +87,7 @@ add_custom_command(TARGET maze POST_BUILD
 )
 
 # 2. Copy the ASSETS folder (Recursive)
-# This preserves the folder structure (models/trees9, etc.) so textures load correctly
-add_custom_command(TARGET maze POST_BUILD
+add_custom_command(TARGET maze_host POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets
     ${CMAKE_BINARY_DIR}/assets

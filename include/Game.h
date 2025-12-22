@@ -1,14 +1,26 @@
 #include "../include/learnopengl/camera.h"
 #include "Maze.h"
 
+// Forward declaration
+struct GLFWwindow;
+
+enum class GameMode { HOST, CLIENT };
+
 class Game {
 public:
   // game state
   bool Keys[1024];
   unsigned int Width, Height;
 
+  // Game mode
+  GameMode mode;
+  bool movementLocked; // For client mode
+  int serverSocket;    // For host mode (listening socket)
+  int clientSocket;    // For host mode (connected client)
+
   // constructor and destructor
-  Game(unsigned int width, unsigned int height);
+  Game(unsigned int width, unsigned int height,
+       GameMode gameMode = GameMode::HOST);
   ~Game();
 
   // Ciclo de vida
@@ -30,4 +42,16 @@ public:
 
   // Gate at maze end
   Mesh *gateMesh; // Gate model for maze exit
+
+  // Network connection
+  int networkSocket;
+  bool connectedToPortal;
+  glm::vec3 portalPosition;
+
+  // Helper method
+  void CheckPortalProximity();
+
+  // Pause state
+  bool isPaused;
+  GLFWwindow *windowPtr; // Store window pointer for cursor control
 };

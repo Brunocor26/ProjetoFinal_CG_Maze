@@ -8,8 +8,8 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-// Global Game instance
-Game MazeGame(SCR_WIDTH, SCR_HEIGHT);
+// Global Game instance - HOST MODE
+Game MazeGame(SCR_WIDTH, SCR_HEIGHT, GameMode::HOST);
 
 // time variables
 float deltaTime = 0.0f;
@@ -39,7 +39,7 @@ int main() {
 
   // create window
   GLFWwindow *window =
-      glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Project 1: 3D Maze", NULL, NULL);
+      glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Maze HOST", NULL, NULL);
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();

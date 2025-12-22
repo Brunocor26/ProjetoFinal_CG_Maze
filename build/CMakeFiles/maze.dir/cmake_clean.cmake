@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/maze.dir/src/glad.c.o.d"
   "CMakeFiles/maze.dir/src/main.cpp.o"
   "CMakeFiles/maze.dir/src/main.cpp.o.d"
+  "CMakeFiles/maze.dir/src/network.cpp.o"
+  "CMakeFiles/maze.dir/src/network.cpp.o.d"
   "maze.exe"
   "maze.exe.pdb"
 )

@@ -1,44 +1,98 @@
 [
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/src/main.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main.cpp",
-  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main.cpp",
-  "output": "CMakeFiles/maze.dir/src/main.cpp.o"
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/main_host.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main_host.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main_host.cpp",
+  "output": "CMakeFiles/maze_host.dir/src/main_host.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/src/Game.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Game.cpp",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/Game.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Game.cpp",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Game.cpp",
-  "output": "CMakeFiles/maze.dir/src/Game.cpp.o"
+  "output": "CMakeFiles/maze_host.dir/src/Game.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/src/Maze.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Maze.cpp",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/Maze.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Maze.cpp",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Maze.cpp",
-  "output": "CMakeFiles/maze.dir/src/Maze.cpp.o"
+  "output": "CMakeFiles/maze_host.dir/src/Maze.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/src/Objloader.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/Objloader.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp",
-  "output": "CMakeFiles/maze.dir/src/Objloader.cpp.o"
+  "output": "CMakeFiles/maze_host.dir/src/Objloader.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/gcc  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -o CMakeFiles/maze.dir/src/glad.c.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/network.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp",
+  "output": "CMakeFiles/maze_host.dir/src/network.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/gcc  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -o CMakeFiles/maze_host.dir/src/glad.c.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c",
-  "output": "CMakeFiles/maze.dir/src/glad.c.o"
+  "output": "CMakeFiles/maze_host.dir/src/glad.c.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/include/kruksal/kruksal.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp",
-  "output": "CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o"
+  "output": "CMakeFiles/maze_host.dir/include/kruksal/kruksal.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_host.dir/include/kruksal/maze_generator.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp",
   "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp",
-  "output": "CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o"
+  "output": "CMakeFiles/maze_host.dir/include/kruksal/maze_generator.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/main_client.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main_client.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/main_client.cpp",
+  "output": "CMakeFiles/maze_client.dir/src/main_client.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/Game.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Game.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Game.cpp",
+  "output": "CMakeFiles/maze_client.dir/src/Game.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/Maze.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Maze.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Maze.cpp",
+  "output": "CMakeFiles/maze_client.dir/src/Maze.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/Objloader.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/Objloader.cpp",
+  "output": "CMakeFiles/maze_client.dir/src/Objloader.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/network.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/network.cpp",
+  "output": "CMakeFiles/maze_client.dir/src/network.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/gcc  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -o CMakeFiles/maze_client.dir/src/glad.c.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/src/glad.c",
+  "output": "CMakeFiles/maze_client.dir/src/glad.c.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/include/kruksal/kruksal.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/kruksal.cpp",
+  "output": "CMakeFiles/maze_client.dir/include/kruksal/kruksal.cpp.o"
+},
+{
+  "directory": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build",
+  "command": "/usr/bin/g++  -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include -I/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/configuration -g -std=gnu++17 -o CMakeFiles/maze_client.dir/include/kruksal/maze_generator.cpp.o -c /home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp",
+  "file": "/home/bruno/Desktop/3Ano/CG/ProjetoFinal/include/kruksal/maze_generator.cpp",
+  "output": "CMakeFiles/maze_client.dir/include/kruksal/maze_generator.cpp.o"
 }
 ]

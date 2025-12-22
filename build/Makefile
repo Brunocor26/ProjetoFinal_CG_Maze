@@ -117,24 +117,38 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named maze
+# Target rules for targets named maze_host
 
 # Build rule for target.
-maze: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 maze
-.PHONY : maze
+maze_host: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 maze_host
+.PHONY : maze_host
 
 # fast build rule for target.
-maze/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/build
-.PHONY : maze/fast
+maze_host/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/build
+.PHONY : maze_host/fast
+
+#=============================================================================
+# Target rules for targets named maze_client
+
+# Build rule for target.
+maze_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 maze_client
+.PHONY : maze_client
+
+# fast build rule for target.
+maze_client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/build
+.PHONY : maze_client/fast
 
 include/kruksal/kruksal.o: include/kruksal/kruksal.cpp.o
 .PHONY : include/kruksal/kruksal.o
 
 # target to build an object file
 include/kruksal/kruksal.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/kruksal.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/kruksal.cpp.o
 .PHONY : include/kruksal/kruksal.cpp.o
 
 include/kruksal/kruksal.i: include/kruksal/kruksal.cpp.i
@@ -142,7 +156,8 @@ include/kruksal/kruksal.i: include/kruksal/kruksal.cpp.i
 
 # target to preprocess a source file
 include/kruksal/kruksal.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/kruksal.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/kruksal.cpp.i
 .PHONY : include/kruksal/kruksal.cpp.i
 
 include/kruksal/kruksal.s: include/kruksal/kruksal.cpp.s
@@ -150,7 +165,8 @@ include/kruksal/kruksal.s: include/kruksal/kruksal.cpp.s
 
 # target to generate assembly for a file
 include/kruksal/kruksal.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/kruksal.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/kruksal.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/kruksal.cpp.s
 .PHONY : include/kruksal/kruksal.cpp.s
 
 include/kruksal/maze_generator.o: include/kruksal/maze_generator.cpp.o
@@ -158,7 +174,8 @@ include/kruksal/maze_generator.o: include/kruksal/maze_generator.cpp.o
 
 # target to build an object file
 include/kruksal/maze_generator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/maze_generator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/maze_generator.cpp.o
 .PHONY : include/kruksal/maze_generator.cpp.o
 
 include/kruksal/maze_generator.i: include/kruksal/maze_generator.cpp.i
@@ -166,7 +183,8 @@ include/kruksal/maze_generator.i: include/kruksal/maze_generator.cpp.i
 
 # target to preprocess a source file
 include/kruksal/maze_generator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/maze_generator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/maze_generator.cpp.i
 .PHONY : include/kruksal/maze_generator.cpp.i
 
 include/kruksal/maze_generator.s: include/kruksal/maze_generator.cpp.s
@@ -174,7 +192,8 @@ include/kruksal/maze_generator.s: include/kruksal/maze_generator.cpp.s
 
 # target to generate assembly for a file
 include/kruksal/maze_generator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/include/kruksal/maze_generator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/include/kruksal/maze_generator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/include/kruksal/maze_generator.cpp.s
 .PHONY : include/kruksal/maze_generator.cpp.s
 
 src/Game.o: src/Game.cpp.o
@@ -182,7 +201,8 @@ src/Game.o: src/Game.cpp.o
 
 # target to build an object file
 src/Game.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Game.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Game.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Game.cpp.o
 .PHONY : src/Game.cpp.o
 
 src/Game.i: src/Game.cpp.i
@@ -190,7 +210,8 @@ src/Game.i: src/Game.cpp.i
 
 # target to preprocess a source file
 src/Game.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Game.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Game.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Game.cpp.i
 .PHONY : src/Game.cpp.i
 
 src/Game.s: src/Game.cpp.s
@@ -198,7 +219,8 @@ src/Game.s: src/Game.cpp.s
 
 # target to generate assembly for a file
 src/Game.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Game.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Game.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Game.cpp.s
 .PHONY : src/Game.cpp.s
 
 src/Maze.o: src/Maze.cpp.o
@@ -206,7 +228,8 @@ src/Maze.o: src/Maze.cpp.o
 
 # target to build an object file
 src/Maze.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Maze.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Maze.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Maze.cpp.o
 .PHONY : src/Maze.cpp.o
 
 src/Maze.i: src/Maze.cpp.i
@@ -214,7 +237,8 @@ src/Maze.i: src/Maze.cpp.i
 
 # target to preprocess a source file
 src/Maze.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Maze.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Maze.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Maze.cpp.i
 .PHONY : src/Maze.cpp.i
 
 src/Maze.s: src/Maze.cpp.s
@@ -222,7 +246,8 @@ src/Maze.s: src/Maze.cpp.s
 
 # target to generate assembly for a file
 src/Maze.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Maze.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Maze.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Maze.cpp.s
 .PHONY : src/Maze.cpp.s
 
 src/Objloader.o: src/Objloader.cpp.o
@@ -230,7 +255,8 @@ src/Objloader.o: src/Objloader.cpp.o
 
 # target to build an object file
 src/Objloader.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Objloader.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Objloader.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Objloader.cpp.o
 .PHONY : src/Objloader.cpp.o
 
 src/Objloader.i: src/Objloader.cpp.i
@@ -238,7 +264,8 @@ src/Objloader.i: src/Objloader.cpp.i
 
 # target to preprocess a source file
 src/Objloader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Objloader.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Objloader.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Objloader.cpp.i
 .PHONY : src/Objloader.cpp.i
 
 src/Objloader.s: src/Objloader.cpp.s
@@ -246,7 +273,8 @@ src/Objloader.s: src/Objloader.cpp.s
 
 # target to generate assembly for a file
 src/Objloader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/Objloader.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/Objloader.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Objloader.cpp.s
 .PHONY : src/Objloader.cpp.s
 
 src/glad.o: src/glad.c.o
@@ -254,7 +282,8 @@ src/glad.o: src/glad.c.o
 
 # target to build an object file
 src/glad.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/glad.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/glad.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/glad.c.o
 .PHONY : src/glad.c.o
 
 src/glad.i: src/glad.c.i
@@ -262,7 +291,8 @@ src/glad.i: src/glad.c.i
 
 # target to preprocess a source file
 src/glad.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/glad.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/glad.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/glad.c.i
 .PHONY : src/glad.c.i
 
 src/glad.s: src/glad.c.s
@@ -270,32 +300,84 @@ src/glad.s: src/glad.c.s
 
 # target to generate assembly for a file
 src/glad.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/glad.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/glad.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/glad.c.s
 .PHONY : src/glad.c.s
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+src/main_client.o: src/main_client.cpp.o
+.PHONY : src/main_client.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/main_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/main_client.cpp.o
+.PHONY : src/main_client.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/main_client.i: src/main_client.cpp.i
+.PHONY : src/main_client.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/main_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/main_client.cpp.i
+.PHONY : src/main_client.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/main_client.s: src/main_client.cpp.s
+.PHONY : src/main_client.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze.dir/build.make CMakeFiles/maze.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/main_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/main_client.cpp.s
+.PHONY : src/main_client.cpp.s
+
+src/main_host.o: src/main_host.cpp.o
+.PHONY : src/main_host.o
+
+# target to build an object file
+src/main_host.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/main_host.cpp.o
+.PHONY : src/main_host.cpp.o
+
+src/main_host.i: src/main_host.cpp.i
+.PHONY : src/main_host.i
+
+# target to preprocess a source file
+src/main_host.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/main_host.cpp.i
+.PHONY : src/main_host.cpp.i
+
+src/main_host.s: src/main_host.cpp.s
+.PHONY : src/main_host.s
+
+# target to generate assembly for a file
+src/main_host.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/main_host.cpp.s
+.PHONY : src/main_host.cpp.s
+
+src/network.o: src/network.cpp.o
+.PHONY : src/network.o
+
+# target to build an object file
+src/network.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/network.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/network.cpp.o
+.PHONY : src/network.cpp.o
+
+src/network.i: src/network.cpp.i
+.PHONY : src/network.i
+
+# target to preprocess a source file
+src/network.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/network.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/network.cpp.i
+.PHONY : src/network.cpp.i
+
+src/network.s: src/network.cpp.s
+.PHONY : src/network.s
+
+# target to generate assembly for a file
+src/network.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/network.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/network.cpp.s
+.PHONY : src/network.cpp.s
 
 # Help Target
 help:
@@ -305,7 +387,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... maze"
+	@echo "... maze_client"
+	@echo "... maze_host"
 	@echo "... include/kruksal/kruksal.o"
 	@echo "... include/kruksal/kruksal.i"
 	@echo "... include/kruksal/kruksal.s"
@@ -324,9 +407,15 @@ help:
 	@echo "... src/glad.o"
 	@echo "... src/glad.i"
 	@echo "... src/glad.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/main_client.o"
+	@echo "... src/main_client.i"
+	@echo "... src/main_client.s"
+	@echo "... src/main_host.o"
+	@echo "... src/main_host.i"
+	@echo "... src/main_host.s"
+	@echo "... src/network.o"
+	@echo "... src/network.i"
+	@echo "... src/network.s"
 .PHONY : help
 
 
