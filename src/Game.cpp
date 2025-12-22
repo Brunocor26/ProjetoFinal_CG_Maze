@@ -21,7 +21,8 @@ Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
       networkSocket(-1), connectedToPortal(false), portalPosition(0.0f),
       isPaused(false), windowPtr(nullptr), mode(gameMode),
       movementLocked(gameMode == GameMode::CLIENT), serverSocket(-1),
-      clientSocket(-1), showingIntroDialog(true), textRenderer(nullptr) {
+      clientSocket(-1), showingIntroDialog(true), textRenderer(nullptr),
+      inheritedColorTint(1.0f, 1.0f, 1.0f) {
   for (int i = 0; i < 1024; i++)
     Keys[i] = false;
 }
@@ -640,6 +641,28 @@ void Game::ProcessInput(float dt) {
   }
   escPressedLastFrame = escPressed;
 
+  // Handle F key for fullscreen toggle
+  static bool fPressedLastFrame = false;
+  bool fPressed = Keys[GLFW_KEY_F];
+
+  if (fPressed && !fPressedLastFrame && windowPtr) {
+    GLFWmonitor *monitor = glfwGetWindowMonitor(windowPtr);
+
+    if (monitor == nullptr) {
+      // Currently windowed, switch to fullscreen
+      GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+      const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+      glfwSetWindowMonitor(windowPtr, primaryMonitor, 0, 0, mode->width,
+                           mode->height, mode->refreshRate);
+      std::cout << "Switched to FULLSCREEN mode" << std::endl;
+    } else {
+      // Currently fullscreen, switch to windowed
+      glfwSetWindowMonitor(windowPtr, nullptr, 100, 100, Width, Height, 0);
+      std::cout << "Switched to WINDOWED mode" << std::endl;
+    }
+  }
+  fPressedLastFrame = fPressed;
+
   // Don't process movement if paused
   if (isPaused) {
     return;
@@ -734,7 +757,16 @@ void Game::Update(float dt) {
 
         if (message.find("UNLOCK") != std::string::npos) {
           movementLocked = false;
-          std::cout << "\n*** UNLOCKED! You can now move! ***" << std::endl;
+
+          // Parse color tint from message (format: "UNLOCK r g b")
+          float r, g, b;
+          if (sscanf(buffer, "UNLOCK %f %f %f", &r, &g, &b) == 3) {
+            inheritedColorTint = glm::vec3(r, g, b);
+            std::cout << "\n*** UNLOCKED with inherited color tint! ***"
+                      << std::endl;
+          } else {
+            std::cout << "\n*** UNLOCKED! You can now move! ***" << std::endl;
+          }
           std::cout << "Navigate to the portal to win!\n" << std::endl;
         }
       }
@@ -777,6 +809,10 @@ void Game::Render() {
 
   gameShader->setMat4("projection", glm::value_ptr(projection));
   gameShader->setMat4("view", glm::value_ptr(view));
+
+  // Calculate and set environment tint based on portal proximity
+  glm::vec3 envTint = GetEnvironmentTint();
+  gameShader->setVec3("environmentTint", envTint.x, envTint.y, envTint.z);
 
   // Render outdoor ground first (underneath everything)
   if (outdoorGroundMesh) {
@@ -857,11 +893,15 @@ void Game::CheckPortalProximity() {
       std::cout << "Game PAUSED at portal." << std::endl;
       std::cout << "Press ESC to resume and continue exploring." << std::endl;
 
-      // Send unlock message to client
+      // Send unlock message to client with current color tint
       if (clientSocket >= 0) {
-        const char *unlockMsg = "UNLOCK";
+        glm::vec3 currentTint = GetEnvironmentTint();
+        char unlockMsg[128];
+        snprintf(unlockMsg, sizeof(unlockMsg), "UNLOCK %.3f %.3f %.3f",
+                 currentTint.x, currentTint.y, currentTint.z);
         Network::sendData(clientSocket, unlockMsg, strlen(unlockMsg));
-        std::cout << "Sent UNLOCK signal to client!" << std::endl;
+        std::cout << "Sent UNLOCK signal with color tint to client!"
+                  << std::endl;
       } else {
         std::cout << "No client connected to unlock." << std::endl;
       }
@@ -882,6 +922,33 @@ void Game::CheckPortalProximity() {
       connectedToPortal = true;
     }
   }
+}
+
+glm::vec3 Game::GetEnvironmentTint() {
+  // Calculate distance from camera to portal
+  float distance = glm::length(camera->Position - portalPosition);
+
+  // Define maximum distance (full maze width)
+  float maxDistance = currentMaze->width * currentMaze->cellSize;
+
+  // Calculate normalized distance (0 = at portal, 1 = far from portal)
+  float t = glm::clamp(1.0f - (distance / maxDistance), 0.0f, 1.0f);
+
+  // Apply smoothstep for smooth interpolation
+  t = t * t * (3.0f - 2.0f * t);
+
+  // Define colors
+  glm::vec3 normalColor(1.0f, 1.0f, 1.0f); // White/neutral
+  glm::vec3 portalColor(0.4f, 0.2f,
+                        1.0f); // Intense purple/mystical (more dramatic)
+
+  // For client mode, start from inherited color instead of white
+  if (mode == GameMode::CLIENT) {
+    normalColor = inheritedColorTint;
+  }
+
+  // Interpolate between colors
+  return glm::mix(normalColor, portalColor, t);
 }
 
 void Game::RenderIntroDialog() {
@@ -973,8 +1040,8 @@ void Game::RenderIntroDialog() {
   float centerX = Width / 2.0f;
 
   // Title
-  textRenderer->RenderText("Maze: Escape from yourself", centerX - 120.0f, Height - 100.0f, 1.5f,
-                           glm::vec3(1.0f, 1.0f, 1.0f));
+  textRenderer->RenderText("Maze: Escape from yourself", centerX - 120.0f,
+                           Height - 100.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
   // Mode
   std::string modeText =
@@ -985,9 +1052,11 @@ void Game::RenderIntroDialog() {
   // Objective
   std::string objectiveText;
   if (mode == GameMode::HOST) {
-    objectiveText = " 'No man ever steps in the same river twice, for it's not the same river and he's not the same man.' - Heraclitus";
+    objectiveText = " 'No man ever steps in the same river twice, for it's not "
+                    "the same river and he's not the same man.' - Heraclitus";
   } else {
-    objectiveText = "Do you still feel like you are the same man? Is this still the same river?";
+    objectiveText = "Do you still feel like you are the same man? Is this "
+                    "still the same river?";
   }
   textRenderer->RenderText(objectiveText, centerX - 220.0f, Height - 200.0f,
                            0.8f, glm::vec3(0.9f, 0.9f, 0.9f));

@@ -26,6 +26,7 @@ uniform sampler2D texture_diffuse1;
 uniform Light light;
 uniform bool useTexture;
 uniform vec3 objectColor;
+uniform vec3 environmentTint; // Progressive color tint based on portal proximity
 
 void main()
 {
@@ -68,6 +69,9 @@ void main()
     ambient  *= attenuation;
     
     vec3 result = ambient + diffuse + specular;
+    
+    // Apply environment tint (progressive color transition to portal)
+    result = result * environmentTint;
 
     // --- (OPTIONAL) FOG ---
     float fogDistance = length(viewPos - FragPos);

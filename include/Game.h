@@ -47,9 +47,12 @@ public:
   int networkSocket;
   bool connectedToPortal;
   glm::vec3 portalPosition;
+  glm::vec3 inheritedColorTint; // Color tint inherited from host (client mode)
 
   // Helper method
   void CheckPortalProximity();
+  glm::vec3
+  GetEnvironmentTint(); // Progressive color transition based on portal distance
 
   // Pause state
   bool isPaused;

@@ -209,6 +209,25 @@ Pressionando a tecla ESC:
     \item Movimento e rotação da câmara são bloqueados
 \end{itemize}
 
+\subsection{Transição de Cor Progressiva}
+Uma feature adicional implementada é a transição gradual da cor do ambiente à medida que o jogador se aproxima do portal. Este efeito visual cria feedback atmosférico e ajuda o jogador a perceber a proximidade ao objetivo.
+
+\textbf{Implementação}:
+\begin{itemize}
+    \item Cálculo da distância entre câmara e portal
+    \item Normalização da distância (0-1) em relação à largura total do labirinto
+    \item Aplicação de \textit{smoothstep} para interpolação suave
+    \item Transição de branco (normal) para roxo/místico (próximo do portal)
+    \item Aplicação do \textit{tint} no fragment shader antes do efeito de névoa
+\end{itemize}
+
+A função \texttt{GetEnvironmentTint()} calcula o fator de interpolação usando a fórmula:
+\begin{equation}
+t = t^2(3 - 2t)
+\end{equation}
+
+Este \textit{smoothstep} garante uma transição visual suave, sem mudanças abruptas de cor.
+
 \subsection{Texturas e Materiais}
 O jogo utiliza texturas PBR (Physically-Based Rendering) de alta qualidade (4K):
 
