@@ -277,6 +277,33 @@ src/Objloader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/Objloader.cpp.s
 .PHONY : src/Objloader.cpp.s
 
+src/TextRenderer.o: src/TextRenderer.cpp.o
+.PHONY : src/TextRenderer.o
+
+# target to build an object file
+src/TextRenderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/TextRenderer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/TextRenderer.cpp.o
+.PHONY : src/TextRenderer.cpp.o
+
+src/TextRenderer.i: src/TextRenderer.cpp.i
+.PHONY : src/TextRenderer.i
+
+# target to preprocess a source file
+src/TextRenderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/TextRenderer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/TextRenderer.cpp.i
+.PHONY : src/TextRenderer.cpp.i
+
+src/TextRenderer.s: src/TextRenderer.cpp.s
+.PHONY : src/TextRenderer.s
+
+# target to generate assembly for a file
+src/TextRenderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/src/TextRenderer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/src/TextRenderer.cpp.s
+.PHONY : src/TextRenderer.cpp.s
+
 src/glad.o: src/glad.c.o
 .PHONY : src/glad.o
 
@@ -404,6 +431,9 @@ help:
 	@echo "... src/Objloader.o"
 	@echo "... src/Objloader.i"
 	@echo "... src/Objloader.s"
+	@echo "... src/TextRenderer.o"
+	@echo "... src/TextRenderer.i"
+	@echo "... src/TextRenderer.s"
 	@echo "... src/glad.o"
 	@echo "... src/glad.i"
 	@echo "... src/glad.s"

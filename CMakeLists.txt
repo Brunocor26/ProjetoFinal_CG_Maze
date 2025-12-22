@@ -9,6 +9,7 @@ list(APPEND CMAKE_PREFIX_PATH /opt/homebrew /opt/homebrew/lib/cmake)
 
 # Dependencies
 find_package(glfw3 REQUIRED)
+find_package(Freetype REQUIRED)
 
 # ==========================================
 # Shared source files
@@ -18,6 +19,7 @@ set(COMMON_SOURCES
     src/Maze.cpp
     src/Objloader.cpp
     src/network.cpp
+    src/TextRenderer.cpp
     src/glad.c
     include/kruksal/kruksal.cpp
     include/kruksal/maze_generator.cpp
@@ -57,11 +59,13 @@ foreach(target maze_host maze_client)
     target_include_directories(${target} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_BINARY_DIR}/configuration
+        ${FREETYPE_INCLUDE_DIRS}
     )
     
     # Libraries Linking
     target_link_libraries(${target} PRIVATE dl)
     target_link_libraries(${target} PRIVATE glfw)
+    target_link_libraries(${target} PRIVATE ${FREETYPE_LIBRARIES})
     
     if (APPLE)
         target_compile_definitions(${target} PRIVATE GL_SILENCE_DEPRECATION)

@@ -1,6 +1,7 @@
 #include "../include/Game.h"
 #include "../include/Network.h"
 #include "../include/Shader.h"
+#include "../include/TextRenderer.h"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
@@ -20,7 +21,7 @@ Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
       networkSocket(-1), connectedToPortal(false), portalPosition(0.0f),
       isPaused(false), windowPtr(nullptr), mode(gameMode),
       movementLocked(gameMode == GameMode::CLIENT), serverSocket(-1),
-      clientSocket(-1) {
+      clientSocket(-1), showingIntroDialog(true), textRenderer(nullptr) {
   for (int i = 0; i < 1024; i++)
     Keys[i] = false;
 }
@@ -34,6 +35,7 @@ Game::~Game() {
   delete outdoorGroundMesh;
   delete treeMesh;
   delete gateMesh;
+  delete textRenderer;
 
   // Close network connections
   if (networkSocket >= 0) {
@@ -77,6 +79,39 @@ void Game::Init() {
     }
   }
   std::cout << "=====================\n" << std::endl;
+
+  // Show intro dialog instructions
+  std::cout << "\n╔════════════════════════════════════════════════╗"
+            << std::endl;
+  std::cout << "║        WELCOME TO THE MAZE GAME!              ║" << std::endl;
+  std::cout << "╠════════════════════════════════════════════════╣"
+            << std::endl;
+  if (mode == GameMode::HOST) {
+    std::cout << "║  MODE: HOST                                    ║"
+              << std::endl;
+    std::cout << "║  GOAL: Reach the portal to unlock the client  ║"
+              << std::endl;
+  } else {
+    std::cout << "║  MODE: CLIENT                                  ║"
+              << std::endl;
+    std::cout << "║  GOAL: Wait for unlock, then reach portal     ║"
+              << std::endl;
+  }
+  std::cout << "╠════════════════════════════════════════════════╣"
+            << std::endl;
+  std::cout << "║  CONTROLS:                                     ║"
+            << std::endl;
+  std::cout << "║  • WASD / Arrow Keys - Move                    ║"
+            << std::endl;
+  std::cout << "║  • Mouse - Look around                         ║"
+            << std::endl;
+  std::cout << "║  • ESC - Pause/Resume                          ║"
+            << std::endl;
+  std::cout << "╠════════════════════════════════════════════════╣"
+            << std::endl;
+  std::cout << "║  Press ENTER to start the game!               ║" << std::endl;
+  std::cout << "╚════════════════════════════════════════════════╝\n"
+            << std::endl;
 
   // 1. Camera - Start higher and looking down to ensure visibility
   camera = new Camera(glm::vec3(15.0f, 20.0f, 15.0f),
@@ -515,6 +550,12 @@ end_loop_init:
   portalPosition =
       glm::vec3(currentMaze->endParams.x * currentMaze->cellSize, 0.0f,
                 currentMaze->endParams.y * currentMaze->cellSize);
+
+  // Initialize text renderer for intro dialog
+  textRenderer = new TextRenderer(Width, Height);
+  // Load font (TODO: adjust path)
+  textRenderer->Load("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24);
+  std::cout << "Text renderer initialized!" << std::endl;
 }
 
 unsigned int loadTexture(char const *path) {
@@ -565,6 +606,20 @@ bool CheckCollision(glm::vec3 targetPos, Maze *maze) {
 }
 
 void Game::ProcessInput(float dt) {
+  // Handle intro dialog
+  static bool enterPressedLastFrame = false;
+  bool enterPressed = Keys[GLFW_KEY_ENTER] || Keys[GLFW_KEY_KP_ENTER];
+
+  if (showingIntroDialog) {
+    if (enterPressed && !enterPressedLastFrame) {
+      showingIntroDialog = false;
+      std::cout << "\n=== Game Started! ===" << std::endl;
+    }
+    enterPressedLastFrame = enterPressed;
+    return; // Don't process any other input while showing dialog
+  }
+  enterPressedLastFrame = enterPressed;
+
   // Handle ESC key for pause/unpause
   static bool escPressedLastFrame = false;
   bool escPressed = Keys[GLFW_KEY_ESCAPE];
@@ -771,6 +826,11 @@ void Game::Render() {
     gameShader->setVec3("objectColor", 0.3f, 0.6f, 0.9f); // Glowing cyan portal
     gateMesh->Draw(gameShader->ID);
   }
+
+  // Render intro dialog overlay if needed
+  if (showingIntroDialog) {
+    RenderIntroDialog();
+  }
 }
 
 void Game::CheckPortalProximity() {
@@ -801,9 +861,9 @@ void Game::CheckPortalProximity() {
       if (clientSocket >= 0) {
         const char *unlockMsg = "UNLOCK";
         Network::sendData(clientSocket, unlockMsg, strlen(unlockMsg));
-        std::cout << "✓ Sent UNLOCK signal to client!" << std::endl;
+        std::cout << "Sent UNLOCK signal to client!" << std::endl;
       } else {
-        std::cout << "⚠ No client connected to unlock." << std::endl;
+        std::cout << "No client connected to unlock." << std::endl;
       }
 
       connectedToPortal = true;
@@ -822,4 +882,133 @@ void Game::CheckPortalProximity() {
       connectedToPortal = true;
     }
   }
+}
+
+void Game::RenderIntroDialog() {
+  if (!textRenderer) {
+    return; // Safety check
+  }
+
+  // Save current OpenGL state
+  GLboolean depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
+  GLboolean blendEnabled = glIsEnabled(GL_BLEND);
+
+  // Disable depth test and enable blending for 2D overlay
+  glDisable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  // Simple 2D quad vertices (fullscreen overlay in NDC)
+  float overlayVertices[] = {// positions (NDC: -1 to 1)
+                             -1.0f, -1.0f, 0.0f, 1.0f,  -1.0f, 0.0f,
+                             1.0f,  1.0f,  0.0f, 1.0f,  1.0f,  0.0f,
+                             -1.0f, 1.0f,  0.0f, -1.0f, -1.0f, 0.0f};
+
+  // Create VAO, VBO for the overlay
+  unsigned int overlayVAO, overlayVBO;
+  glGenVertexArrays(1, &overlayVAO);
+  glGenBuffers(1, &overlayVBO);
+
+  glBindVertexArray(overlayVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, overlayVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(overlayVertices), overlayVertices,
+               GL_STATIC_DRAW);
+
+  // Position attribute
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  // Use simple shader for 2D rendering (created once, cached)
+  static unsigned int simpleShaderProgram = 0;
+  if (simpleShaderProgram == 0) {
+    // Vertex shader - pass through NDC coordinates
+    const char *vertexShaderSource = R"(
+      #version 330 core
+      layout (location = 0) in vec3 aPos;
+      void main() {
+        gl_Position = vec4(aPos, 1.0);
+      }
+    )";
+
+    // Fragment shader - semi-transparent dark overlay
+    const char *fragmentShaderSource = R"(
+      #version 330 core
+      out vec4 FragColor;
+      void main() {
+        FragColor = vec4(0.0, 0.0, 0.0, 0.8); // Dark semi-transparent
+      }
+    )";
+
+    // Compile vertex shader
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    // Compile fragment shader
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    // Link shaders into program
+    simpleShaderProgram = glCreateProgram();
+    glAttachShader(simpleShaderProgram, vertexShader);
+    glAttachShader(simpleShaderProgram, fragmentShader);
+    glLinkProgram(simpleShaderProgram);
+
+    // Clean up shaders (they're linked into the program now)
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+  }
+
+  // Use shader and render the overlay quad
+  glUseProgram(simpleShaderProgram);
+  glBindVertexArray(overlayVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+
+  // Clean up temporary VAO/VBO
+  glDeleteVertexArrays(1, &overlayVAO);
+  glDeleteBuffers(1, &overlayVBO);
+
+  // Now render text on top of the overlay
+  float centerX = Width / 2.0f;
+
+  // Title
+  textRenderer->RenderText("Maze: Escape from yourself", centerX - 120.0f, Height - 100.0f, 1.5f,
+                           glm::vec3(1.0f, 1.0f, 1.0f));
+
+  // Mode
+  std::string modeText =
+      (mode == GameMode::HOST) ? "MODE: HOST" : "MODE: CLIENT";
+  textRenderer->RenderText(modeText, centerX - 100.0f, Height - 150.0f, 1.0f,
+                           glm::vec3(0.8f, 0.8f, 1.0f));
+
+  // Objective
+  std::string objectiveText;
+  if (mode == GameMode::HOST) {
+    objectiveText = " 'No man ever steps in the same river twice, for it's not the same river and he's not the same man.' - Heraclitus";
+  } else {
+    objectiveText = "Do you still feel like you are the same man? Is this still the same river?";
+  }
+  textRenderer->RenderText(objectiveText, centerX - 220.0f, Height - 200.0f,
+                           0.8f, glm::vec3(0.9f, 0.9f, 0.9f));
+
+  // Controls
+  textRenderer->RenderText("CONTROLS:", centerX - 100.0f, Height - 280.0f, 1.0f,
+                           glm::vec3(1.0f, 0.9f, 0.5f));
+  textRenderer->RenderText("WASD / Arrow Keys - Move", centerX - 160.0f,
+                           Height - 320.0f, 0.7f, glm::vec3(0.9f, 0.9f, 0.9f));
+  textRenderer->RenderText("Mouse - Look Around", centerX - 140.0f,
+                           Height - 350.0f, 0.7f, glm::vec3(0.9f, 0.9f, 0.9f));
+  textRenderer->RenderText("ESC - Pause/Resume", centerX - 130.0f,
+                           Height - 380.0f, 0.7f, glm::vec3(0.9f, 0.9f, 0.9f));
+
+  // Instruction to start
+  textRenderer->RenderText("Press ENTER to Start", centerX - 150.0f, 100.0f,
+                           1.0f, glm::vec3(0.5f, 1.0f, 0.5f));
+
+  // Restore previous OpenGL state
+  if (depthTestEnabled)
+    glEnable(GL_DEPTH_TEST);
+  if (!blendEnabled)
+    glDisable(GL_BLEND);
 }

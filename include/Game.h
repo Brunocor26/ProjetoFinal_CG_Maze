@@ -54,4 +54,9 @@ public:
   // Pause state
   bool isPaused;
   GLFWwindow *windowPtr; // Store window pointer for cursor control
+
+  // Intro dialog state
+  bool showingIntroDialog;
+  void RenderIntroDialog();
+  class TextRenderer *textRenderer; // Text rendering system
 };
