@@ -1,65 +1,267 @@
+/**
+ * @file Game.h
+ * @brief Declaração da classe Game - núcleo do jogo de labirinto 3D
+ * @author Projeto CG - Maze Game
+ * @date 2025
+ */
+
+#ifndef GAME_H
+#define GAME_H
+
 #include "../include/learnopengl/camera.h"
 #include "Maze.h"
 
-// Forward declaration
+// ============================================================================
+// FORWARD DECLARATIONS
+// ============================================================================
+
+/// Forward declaration da janela GLFW
 struct GLFWwindow;
 
-enum class GameMode { HOST, CLIENT };
+// ============================================================================
+// ENUMS
+// ============================================================================
 
+/**
+ * @brief Modos de jogo disponíveis
+ *
+ * HOST: Servidor que desbloqueia o cliente ao chegar ao portal
+ * CLIENT: Cliente que fica bloqueado até o HOST alcançar o portal
+ */
+enum class GameMode {
+  HOST,  ///< Modo servidor/anfitrião
+  CLIENT ///< Modo cliente
+};
+
+// ============================================================================
+// CLASSE GAME
+// ============================================================================
+
+/**
+ * @brief Classe principal que gere todo o jogo de labirinto
+ *
+ * Esta classe é responsável por:
+ * - Gestão de recursos (shaders, texturas, meshes)
+ * - Processamento de input (teclado, rato)
+ * - Lógica de jogo (colisões, proximidade ao portal)
+ * - Comunicação de rede (modo HOST/CLIENT)
+ * - Renderização (labirinto, ambiente exterior, UI)
+ *
+ * O jogo suporta dois modos:
+ * - HOST: Cria servidor e desbloqueia cliente ao chegar ao portal
+ * - CLIENT: Conecta ao servidor e aguarda desbloqueio
+ */
 class Game {
 public:
-  // game state
+  // ========================================================================
+  // ESTADO DO JOGO
+  // ========================================================================
+
+  /// Array de estado das teclas (true = pressionada)
   bool Keys[1024];
-  unsigned int Width, Height;
 
-  // Game mode
+  /// Largura da janela em pixels
+  unsigned int Width;
+
+  /// Altura da janela em pixels
+  unsigned int Height;
+
+  // ========================================================================
+  // NETWORKING
+  // ========================================================================
+
+  /// Modo de jogo atual (HOST ou CLIENT)
   GameMode mode;
-  bool movementLocked; // For client mode
-  int serverSocket;    // For host mode (listening socket)
-  int clientSocket;    // For host mode (connected client)
 
-  // constructor and destructor
+  /// Indica se movimento está bloqueado (apenas CLIENT)
+  bool movementLocked;
+
+  /// Socket do servidor (apenas HOST - para aceitar conexões)
+  int serverSocket;
+
+  /// Socket do cliente conectado (apenas HOST)
+  int clientSocket;
+
+  /// Socket de rede (apenas CLIENT - conexão ao servidor)
+  int networkSocket;
+
+  /// Indica se já alcançou o portal
+  bool connectedToPortal;
+
+  /// Posição 3D do portal no labirinto
+  glm::vec3 portalPosition;
+
+  /// Tint de cor herdado do HOST (apenas CLIENT)
+  glm::vec3 inheritedColorTint;
+
+  // ========================================================================
+  // RECURSOS DO JOGO
+  // ========================================================================
+
+  /// Ponteiro para o labirinto atual
+  Maze *currentMaze;
+
+  /// Câmara do jogador (primeira pessoa)
+  Camera *camera;
+
+  /// Mesh do chão exterior (relva)
+  Mesh *outdoorGroundMesh;
+
+  /// Mesh das árvores
+  Mesh *treeMesh;
+
+  /// Posições de todas as árvores no cenário
+  std::vector<glm::vec3> treePositions;
+
+  /// Mesh do portal no final do labirinto
+  Mesh *gateMesh;
+
+  /// Sistema de renderização de texto
+  class TextRenderer *textRenderer;
+
+  // ========================================================================
+  // ESTADO DA UI
+  // ========================================================================
+
+  /// Indica se está a mostrar o diálogo inicial
+  bool showingIntroDialog;
+
+  /// Indica se o jogo está pausado
+  bool isPaused;
+
+  /// Ponteiro para a janela (para controlo do cursor)
+  GLFWwindow *windowPtr;
+
+  // ========================================================================
+  // CONSTRUTOR E DESTRUTOR
+  // ========================================================================
+
+  /**
+   * @brief Construtor do jogo
+   * @param width Largura da janela em pixels
+   * @param height Altura da janela em pixels
+   * @param gameMode Modo de jogo (HOST ou CLIENT), padrão é HOST
+   */
   Game(unsigned int width, unsigned int height,
        GameMode gameMode = GameMode::HOST);
+
+  /**
+   * @brief Destrutor - liberta todos os recursos alocados
+   */
   ~Game();
 
-  // Ciclo de vida
-  void Init();                 // loads shaders, models, textures
-  void ProcessInput(float dt); // process wasd and keyboard inputs
+  // ========================================================================
+  // CICLO DE VIDA DO JOGO
+  // ========================================================================
+
+  /**
+   * @brief Inicializa todos os recursos do jogo
+   *
+   * Carrega shaders, modelos 3D, texturas, gera o labirinto,
+   * inicializa a rede e prepara o jogo para renderização.
+   */
+  void Init();
+
+  /**
+   * @brief Processa input do teclado
+   *
+   * Trata teclas para movimento (WASD/setas), pausa (ESC),
+   * fullscreen (F) e interação com diálogos (ENTER).
+   *
+   * @param dt Delta time para movimento independente de framerate
+   */
+  void ProcessInput(float dt);
+
+  /**
+   * @brief Processa movimento do rato
+   *
+   * Atualiza a orientação da câmara baseado no movimento do rato.
+   *
+   * @param xoffset Deslocamento horizontal do rato
+   * @param yoffset Deslocamento vertical do rato
+   * @param constrainPitch Limita rotação vertical (evita flip)
+   */
   void ProcessMouseMovement(float xoffset, float yoffset,
-                            bool constrainPitch = true); // process mouse input
-  void Update(float dt); // logics (ex: move enemies, open doors)
-  void Render();         // draws everything (calls Draws from Meshes)
+                            bool constrainPitch = true);
 
-  // Membros
-  Maze *currentMaze; // Ponteiro para o nível atual
-  Camera *camera;    // player camera
+  /**
+   * @brief Atualiza lógica do jogo
+   *
+   * Trata comunicação de rede (aceitar conexões, receber mensagens)
+   * e verifica proximidade ao portal.
+   *
+   * @param dt Delta time desde o último frame
+   */
+  void Update(float dt);
 
-  // Outdoor environment
-  Mesh *outdoorGroundMesh;              // Large ground plane with grass
-  Mesh *treeMesh;                       // Tree model
-  std::vector<glm::vec3> treePositions; // Positions for tree instances
+  /**
+   * @brief Renderiza toda a cena
+   *
+   * Desenha o labirinto, ambiente exterior, portal e UI overlays.
+   */
+  void Render();
 
-  // Gate at maze end
-  Mesh *gateMesh; // Gate model for maze exit
+  // ========================================================================
+  // MÉTODOS AUXILIARES
+  // ========================================================================
 
-  // Network connection
-  int networkSocket;
-  bool connectedToPortal;
-  glm::vec3 portalPosition;
-  glm::vec3 inheritedColorTint; // Color tint inherited from host (client mode)
-
-  // Helper method
+  /**
+   * @brief Verifica se o jogador está perto do portal
+   *
+   * Quando o HOST chega ao portal, envia mensagem de desbloqueio
+   * ao CLIENT e mostra diálogo de vitória.
+   */
   void CheckPortalProximity();
-  glm::vec3
-  GetEnvironmentTint(); // Progressive color transition based on portal distance
 
-  // Pause state
-  bool isPaused;
-  GLFWwindow *windowPtr; // Store window pointer for cursor control
+  /**
+   * @brief Calcula tint de cor baseado na proximidade ao portal
+   *
+   * Quanto mais perto do portal, mais a cor ambiente muda para
+   * tons de azul/ciano, criando efeito visual progressivo.
+   *
+   * @return Vetor RGB com o tint calculado
+   */
+  glm::vec3 GetEnvironmentTint();
 
-  // Intro dialog state
-  bool showingIntroDialog;
+  /**
+   * @brief Renderiza o diálogo de introdução
+   *
+   * Mostra overlay semi-transparente com informações de jogo,
+   * controlos e botão para iniciar.
+   */
   void RenderIntroDialog();
-  class TextRenderer *textRenderer; // Text rendering system
+
+private:
+  // ========================================================================
+  // RECURSOS PRIVADOS (OVERLAY)
+  // ========================================================================
+
+  /// Shader program para overlay 2D do diálogo
+  unsigned int overlayShaderProgram;
+
+  /// VAO (Vertex Array Object) do overlay
+  unsigned int overlayVAO;
+
+  /// VBO (Vertex Buffer Object) do overlay
+  unsigned int overlayVBO;
+
+  /// Flag indicando se recursos do overlay foram inicializados
+  bool overlayResourcesInitialized;
+
+  /**
+   * @brief Inicializa recursos OpenGL para o overlay
+   *
+   * Cria shader, VAO e VBO para renderização do diálogo.
+   * Chamado automaticamente na primeira renderização.
+   */
+  void InitializeOverlayResources();
+
+  /**
+   * @brief Liberta recursos OpenGL do overlay
+   *
+   * Deleta shader, VAO e VBO. Chamado no destrutor.
+   */
+  void CleanupOverlayResources();
 };
+
+#endif // GAME_H

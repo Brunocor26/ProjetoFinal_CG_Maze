@@ -1,3 +1,14 @@
+// ============================================================================
+// MAZE GAME - Main Game Implementation
+// ============================================================================
+// This file contains the core game logic including:
+// - Game initialization and cleanup
+// - Input processing (keyboard, mouse)
+// - Network communication (host/client mode)
+// - Rendering (3D maze, UI overlays)
+// - Collision detection and portal proximity
+// ============================================================================
+
 #include "../include/Game.h"
 #include "../include/Network.h"
 #include "../include/Shader.h"
@@ -9,12 +20,41 @@
 #include "../include/stb_image.h"
 #include <iostream>
 
-Shader *gameShader;
-Mesh *wall_mesh;
-Mesh *floor_mesh;
+// ============================================================================
+// GLOBAL CONSTANTS AND VARIABLES
+// ============================================================================
 
+// Network configuration
+const int PORT = 8080;          // Server port for host/client communication
+const char *HOST = "127.0.0.1"; // Localhost IP for client connection
+
+// Global rendering resources (shared across game instances)
+Shader *gameShader; // Main shader program for 3D rendering
+Mesh *wall_mesh;    // Mesh for maze walls
+Mesh *floor_mesh;   // Mesh for maze floor
+
+// ============================================================================
+// FORWARD DECLARATIONS
+// ============================================================================
+
+/**
+ * Loads a texture from the specified file path
+ * @param path File path to the texture image
+ * @return OpenGL texture ID
+ */
 unsigned int loadTexture(char const *path);
 
+// ============================================================================
+// CONSTRUCTOR & DESTRUCTOR
+// ============================================================================
+
+/**
+ * Game Constructor
+ * Initializes all game state variables and resources
+ * @param width Window width in pixels
+ * @param height Window height in pixels
+ * @param gameMode Either HOST or CLIENT mode for networked gameplay
+ */
 Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
     : Width(width), Height(height), currentMaze(nullptr), camera(nullptr),
       outdoorGroundMesh(nullptr), treeMesh(nullptr), gateMesh(nullptr),
@@ -22,12 +62,20 @@ Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
       isPaused(false), windowPtr(nullptr), mode(gameMode),
       movementLocked(gameMode == GameMode::CLIENT), serverSocket(-1),
       clientSocket(-1), showingIntroDialog(true), textRenderer(nullptr),
-      inheritedColorTint(1.0f, 1.0f, 1.0f) {
+      inheritedColorTint(1.0f, 1.0f, 1.0f), overlayShaderProgram(0),
+      overlayVAO(0), overlayVBO(0), overlayResourcesInitialized(false) {
+  // Initialize all keyboard keys to unpressed state
   for (int i = 0; i < 1024; i++)
     Keys[i] = false;
 }
 
+/**
+ * Game Destructor
+ * Cleans up all allocated resources including meshes, textures,
+ * shaders, and network connections
+ */
 Game::~Game() {
+  // Free game objects
   delete currentMaze;
   delete camera;
   delete gameShader;
@@ -38,7 +86,10 @@ Game::~Game() {
   delete gateMesh;
   delete textRenderer;
 
-  // Close network connections
+  // Clean up OpenGL overlay resources (VAO, VBO, shader)
+  CleanupOverlayResources();
+
+  // Close all network connections gracefully
   if (networkSocket >= 0) {
     Network::closeSocket(networkSocket);
   }
@@ -50,32 +101,45 @@ Game::~Game() {
   }
 }
 
+// ============================================================================
+// GAME INITIALIZATION
+// ============================================================================
+
+/**
+ * Initialize Game Resources
+ * Sets up network connections, loads all assets (textures, models, shaders),
+ * generates the maze, and prepares the game for rendering
+ */
 void Game::Init() {
-  // Network initialization based on mode
+  // ---------------------------------------------------------------------------
+  // NETWORK SETUP - Initialize based on game mode (HOST or CLIENT)
+  // ---------------------------------------------------------------------------
+
   if (mode == GameMode::HOST) {
     std::cout << "\n===== HOST MODE =====" << std::endl;
     // Create server socket
     serverSocket = Network::createSocket();
     if (serverSocket >= 0) {
-      if (Network::bindAndListen(serverSocket, 8080)) {
-        std::cout << "✓ Server listening on port 8080" << std::endl;
+      if (Network::bindAndListen(serverSocket, PORT)) { // if successful
+        std::cout << "Server listening on port " << PORT << std::endl;
         std::cout << "Waiting for client connection..." << std::endl;
       } else {
-        std::cerr << "✗ Failed to start server" << std::endl;
+        std::cerr << "Failed to start server" << std::endl;
       }
     }
   } else {
     std::cout << "\n===== CLIENT MODE =====" << std::endl;
-    std::cout << "⚠ MOVEMENT LOCKED - Waiting for host to reach portal"
+    std::cout << "MOVEMENT LOCKED - Waiting for host to reach portal"
               << std::endl;
     // Create client socket
     networkSocket = Network::createSocket();
     if (networkSocket >= 0) {
-      std::cout << "Connecting to host at 127.0.0.1:8080..." << std::endl;
-      if (Network::connectToServer(networkSocket, "127.0.0.1", 8080)) {
-        std::cout << "✓ Connected to host!" << std::endl;
+      std::cout << "Connecting to host at " << HOST << ":" << PORT << "..."
+                << std::endl;
+      if (Network::connectToServer(networkSocket, HOST, PORT)) {
+        std::cout << "Connected to host!" << std::endl;
       } else {
-        std::cerr << "✗ Failed to connect to host" << std::endl;
+        std::cerr << "Failed to connect to host" << std::endl;
       }
     }
   }
@@ -559,34 +623,48 @@ end_loop_init:
   std::cout << "Text renderer initialized!" << std::endl;
 }
 
+/**
+ * Load Texture Helper Function
+ * Loads an image file and creates an OpenGL texture with mipmaps
+ * @param path File path to the texture image
+ * @return OpenGL texture ID
+ */
 unsigned int loadTexture(char const *path) {
   unsigned int textureID;
   glGenTextures(1, &textureID);
 
+  // Flip texture vertically to match OpenGL's coordinate system
   stbi_set_flip_vertically_on_load(true);
 
+  // Load image data
   int width, height, nrComponents;
   unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+
   if (data) {
     std::cout << "Texture Loaded! Path: " << path << " | W: " << width
               << " H: " << height << " Ch: " << nrComponents << std::endl;
+
+    // Determine texture format based on number of color channels
     GLenum format;
     if (nrComponents == 1)
-      format = GL_RED;
+      format = GL_RED; // Grayscale
     else if (nrComponents == 3)
-      format = GL_RGB;
+      format = GL_RGB; // RGB
     else if (nrComponents == 4)
-      format = GL_RGBA;
+      format = GL_RGBA; // RGBA (with alpha)
 
+    // Upload texture to GPU
     glBindTexture(GL_TEXTURE_2D, textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
                  GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(
+        GL_TEXTURE_2D); // Generate mipmap levels for better quality
 
+    // Set texture wrapping and filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                    GL_LINEAR_MIPMAP_LINEAR);
+                    GL_LINEAR_MIPMAP_LINEAR); // Trilinear filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_image_free(data);
@@ -598,30 +676,53 @@ unsigned int loadTexture(char const *path) {
   return textureID;
 }
 
-// Helper to check collision without modifying actual position
+/**
+ * Collision Detection Helper
+ * Checks if a target position collides with maze walls
+ * @param targetPos The 3D position to check
+ * @param maze Pointer to the maze object
+ * @return true if collision detected, false otherwise
+ */
 bool CheckCollision(glm::vec3 targetPos, Maze *maze) {
   if (!maze)
     return false;
-  // Simple point collision (can improve to bounding box later)
+  // Simple point collision (can be improved to bounding box in future)
   return maze->IsWall(targetPos.x, targetPos.z);
 }
 
+// ============================================================================
+// INPUT PROCESSING
+// ============================================================================
+
+/**
+ * Process Keyboard Input
+ * Handles all keyboard inputs including dialog interactions, pause/resume,
+ * fullscreen toggle, and player movement
+ * @param dt Delta time since last frame (for frame-independent movement)
+ */
 void Game::ProcessInput(float dt) {
-  // Handle intro dialog
+  // ---------------------------------------------------------------------------
+  // INTRO DIALOG HANDLING
+  // ---------------------------------------------------------------------------
+
+  // Track ENTER key state to detect single press (not hold)
   static bool enterPressedLastFrame = false;
   bool enterPressed = Keys[GLFW_KEY_ENTER] || Keys[GLFW_KEY_KP_ENTER];
 
   if (showingIntroDialog) {
+    // Dismiss intro dialog when ENTER is pressed
     if (enterPressed && !enterPressedLastFrame) {
       showingIntroDialog = false;
       std::cout << "\n=== Game Started! ===" << std::endl;
     }
     enterPressedLastFrame = enterPressed;
-    return; // Don't process any other input while showing dialog
+    return; // Block all other input while dialog is shown
   }
   enterPressedLastFrame = enterPressed;
 
-  // Handle ESC key for pause/unpause
+  // ---------------------------------------------------------------------------
+  // PAUSE/UNPAUSE HANDLING (ESC key)
+  // ---------------------------------------------------------------------------
   static bool escPressedLastFrame = false;
   bool escPressed = Keys[GLFW_KEY_ESCAPE];
 
@@ -641,7 +742,9 @@ void Game::ProcessInput(float dt) {
   }
   escPressedLastFrame = escPressed;
 
-  // Handle F key for fullscreen toggle
+  // ---------------------------------------------------------------------------
+  // FULLSCREEN TOGGLE (F key)
+  // ---------------------------------------------------------------------------
   static bool fPressedLastFrame = false;
   bool fPressed = Keys[GLFW_KEY_F];
 
@@ -649,82 +752,119 @@ void Game::ProcessInput(float dt) {
     GLFWmonitor *monitor = glfwGetWindowMonitor(windowPtr);
 
     if (monitor == nullptr) {
-      // Currently windowed, switch to fullscreen
+      // Currently in windowed mode - switch to fullscreen
       GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
       const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
       glfwSetWindowMonitor(windowPtr, primaryMonitor, 0, 0, mode->width,
                            mode->height, mode->refreshRate);
       std::cout << "Switched to FULLSCREEN mode" << std::endl;
     } else {
-      // Currently fullscreen, switch to windowed
+      // Currently in fullscreen - switch to windowed mode
       glfwSetWindowMonitor(windowPtr, nullptr, 100, 100, Width, Height, 0);
       std::cout << "Switched to WINDOWED mode" << std::endl;
     }
   }
   fPressedLastFrame = fPressed;
 
-  // Don't process movement if paused
+  // ---------------------------------------------------------------------------
+  // MOVEMENT RESTRICTIONS
+  // ---------------------------------------------------------------------------
+
+  // Don't process movement if game is paused
   if (isPaused) {
     return;
   }
 
-  // CLIENT MODE: Don't allow movement until unlocked
+  // CLIENT MODE: Block movement until host reaches portal and sends unlock
   if (mode == GameMode::CLIENT && movementLocked) {
     return;
   }
 
-  // Current Position
+  // ---------------------------------------------------------------------------
+  // PLAYER MOVEMENT (WASD/Arrow Keys)
+  // ---------------------------------------------------------------------------
+
+  // Get current player position and calculate movement velocity
   glm::vec3 currentPos = camera->Position;
   glm::vec3 nextPos = currentPos;
-  float velocity = camera->MovementSpeed * dt;
+  float velocity = camera->MovementSpeed * dt; // Frame-independent movement
 
-  // Determine intended movement direction (X and Z only)
+  // Calculate movement directions (lock to horizontal plane - no flying!)
   glm::vec3 front = camera->Front;
-  front.y = 0.0f; // Lock Y movement
+  front.y = 0.0f; // Remove vertical  component
   front = glm::normalize(front);
   glm::vec3 right = camera->Right;
-  right.y = 0.0f; // Lock Y movement
+  right.y = 0.0f; // Remove vertical component
   right = glm::normalize(right);
 
+  // Accumulate movement from all pressed keys
   glm::vec3 proposedMove = glm::vec3(0.0f);
 
+  // W or UP Arrow: Move forward
   if (Keys[GLFW_KEY_W] || Keys[GLFW_KEY_UP])
     proposedMove += front * velocity;
+  // S or DOWN Arrow: Move backward
   if (Keys[GLFW_KEY_S] || Keys[GLFW_KEY_DOWN])
     proposedMove -= front * velocity;
+  // A or LEFT Arrow: Strafe left
   if (Keys[GLFW_KEY_A] || Keys[GLFW_KEY_LEFT])
     proposedMove -= right * velocity;
+  // D or RIGHT Arrow: Strafe right
   if (Keys[GLFW_KEY_D] || Keys[GLFW_KEY_RIGHT])
     proposedMove += right * velocity;
 
-  // Apply X movement
+  // Apply movement with collision detection (X and Z axes independently)
+  // This allows "sliding" along walls instead of getting stuck
+
+  // Try to move on X axis
   if (!CheckCollision(
           glm::vec3(currentPos.x + proposedMove.x, currentPos.y, currentPos.z),
           currentMaze)) {
     camera->Position.x += proposedMove.x;
   }
 
-  // Apply Z movement
+  // Try to move on Z axis
   if (!CheckCollision(glm::vec3(camera->Position.x, currentPos.y,
                                 currentPos.z + proposedMove.z),
                       currentMaze)) {
     camera->Position.z += proposedMove.z;
   }
 
-  // Lock Y Height
+  // Keep player at constant height (prevent floating or sinking)
   camera->Position.y = 0.5f;
 }
 
+/**
+ * Process Mouse Movement
+ * Updates camera orientation based on mouse movement (look around)
+ * @param xoffset Horizontal mouse movement
+ * @param yoffset Vertical mouse movement
+ * @param constrainPitch Prevent camera from flipping upside down
+ */
 void Game::ProcessMouseMovement(float xoffset, float yoffset,
                                 bool constrainPitch) {
+  // Ignore mouse input when game is paused
   if (isPaused) {
-    return; // Don't process mouse movement when paused
+    return;
   }
+  // Delegate to camera's built-in mouse movement handler
   camera->ProcessMouseMovement(xoffset, yoffset, constrainPitch);
 }
 
+// ============================================================================
+// GAME UPDATE (Network & Game Logic)
+// ============================================================================
+
+/**
+ * Update Game State
+ * Handles network communication (accept connections, receive unlock messages)
+ * and checks portal proximity for win conditions
+ * @param dt Delta time since last frame
+ */
 void Game::Update(float dt) {
-  // HOST MODE: Accept client connection if not already connected
+  // ---------------------------------------------------------------------------
+  // HOST MODE: Accept incoming client connections (non-blocking)
+  // ---------------------------------------------------------------------------
   if (mode == GameMode::HOST && serverSocket >= 0 && clientSocket < 0) {
     // Non-blocking accept check
     fd_set readfds;
@@ -956,6 +1096,11 @@ void Game::RenderIntroDialog() {
     return; // Safety check
   }
 
+  // Initialize overlay resources once
+  if (!overlayResourcesInitialized) {
+    InitializeOverlayResources();
+  }
+
   // Save current OpenGL state
   GLboolean depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
   GLboolean blendEnabled = glIsEnabled(GL_BLEND);
@@ -965,76 +1110,10 @@ void Game::RenderIntroDialog() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  // Simple 2D quad vertices (fullscreen overlay in NDC)
-  float overlayVertices[] = {// positions (NDC: -1 to 1)
-                             -1.0f, -1.0f, 0.0f, 1.0f,  -1.0f, 0.0f,
-                             1.0f,  1.0f,  0.0f, 1.0f,  1.0f,  0.0f,
-                             -1.0f, 1.0f,  0.0f, -1.0f, -1.0f, 0.0f};
-
-  // Create VAO, VBO for the overlay
-  unsigned int overlayVAO, overlayVBO;
-  glGenVertexArrays(1, &overlayVAO);
-  glGenBuffers(1, &overlayVBO);
-
-  glBindVertexArray(overlayVAO);
-  glBindBuffer(GL_ARRAY_BUFFER, overlayVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(overlayVertices), overlayVertices,
-               GL_STATIC_DRAW);
-
-  // Position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-
-  // Use simple shader for 2D rendering (created once, cached)
-  static unsigned int simpleShaderProgram = 0;
-  if (simpleShaderProgram == 0) {
-    // Vertex shader - pass through NDC coordinates
-    const char *vertexShaderSource = R"(
-      #version 330 core
-      layout (location = 0) in vec3 aPos;
-      void main() {
-        gl_Position = vec4(aPos, 1.0);
-      }
-    )";
-
-    // Fragment shader - semi-transparent dark overlay
-    const char *fragmentShaderSource = R"(
-      #version 330 core
-      out vec4 FragColor;
-      void main() {
-        FragColor = vec4(0.0, 0.0, 0.0, 0.8); // Dark semi-transparent
-      }
-    )";
-
-    // Compile vertex shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    // Compile fragment shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    // Link shaders into program
-    simpleShaderProgram = glCreateProgram();
-    glAttachShader(simpleShaderProgram, vertexShader);
-    glAttachShader(simpleShaderProgram, fragmentShader);
-    glLinkProgram(simpleShaderProgram);
-
-    // Clean up shaders (they're linked into the program now)
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-  }
-
   // Use shader and render the overlay quad
-  glUseProgram(simpleShaderProgram);
+  glUseProgram(overlayShaderProgram);
   glBindVertexArray(overlayVAO);
   glDrawArrays(GL_TRIANGLES, 0, 6);
-
-  // Clean up temporary VAO/VBO
-  glDeleteVertexArrays(1, &overlayVAO);
-  glDeleteBuffers(1, &overlayVBO);
 
   // Now render text on top of the overlay
   float centerX = Width / 2.0f;
@@ -1080,4 +1159,113 @@ void Game::RenderIntroDialog() {
     glEnable(GL_DEPTH_TEST);
   if (!blendEnabled)
     glDisable(GL_BLEND);
+}
+
+void Game::InitializeOverlayResources() {
+  // Simple 2D quad vertices (fullscreen overlay in NDC)
+  float overlayVertices[] = {// positions (NDC: -1 to 1)
+                             -1.0f, -1.0f, 0.0f, 1.0f,  -1.0f, 0.0f,
+                             1.0f,  1.0f,  0.0f, 1.0f,  1.0f,  0.0f,
+                             -1.0f, 1.0f,  0.0f, -1.0f, -1.0f, 0.0f};
+
+  // Create VAO, VBO for the overlay (these will be reused)
+  glGenVertexArrays(1, &overlayVAO);
+  glGenBuffers(1, &overlayVBO);
+
+  glBindVertexArray(overlayVAO);
+  glBindBuffer(GL_ARRAY_BUFFER, overlayVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(overlayVertices), overlayVertices,
+               GL_STATIC_DRAW);
+
+  // Position attribute
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  // Unbind
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  // Create simple shader for 2D rendering
+  // Vertex shader - pass through NDC coordinates
+  const char *vertexShaderSource = R"(
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+    void main() {
+      gl_Position = vec4(aPos, 1.0);
+    }
+  )";
+
+  // Fragment shader - semi-transparent dark overlay
+  const char *fragmentShaderSource = R"(
+    #version 330 core
+    out vec4 FragColor;
+    void main() {
+      FragColor = vec4(0.0, 0.0, 0.0, 0.8); // Dark semi-transparent
+    }
+  )";
+
+  // Compile vertex shader
+  unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(vertexShader);
+
+  // Check for shader compile errors
+  int success;
+  char infoLog[512];
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    std::cerr << "ERROR: Overlay Vertex Shader Compilation Failed\n"
+              << infoLog << std::endl;
+  }
+
+  // Compile fragment shader
+  unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(fragmentShader);
+
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    std::cerr << "ERROR: Overlay Fragment Shader Compilation Failed\n"
+              << infoLog << std::endl;
+  }
+
+  // Link shaders into program
+  overlayShaderProgram = glCreateProgram();
+  glAttachShader(overlayShaderProgram, vertexShader);
+  glAttachShader(overlayShaderProgram, fragmentShader);
+  glLinkProgram(overlayShaderProgram);
+
+  glGetProgramiv(overlayShaderProgram, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(overlayShaderProgram, 512, NULL, infoLog);
+    std::cerr << "ERROR: Overlay Shader Program Linking Failed\n"
+              << infoLog << std::endl;
+  }
+
+  // Clean up shaders (they're linked into the program now)
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+
+  overlayResourcesInitialized = true;
+  std::cout << "Overlay resources initialized successfully!" << std::endl;
+}
+
+void Game::CleanupOverlayResources() {
+  if (overlayResourcesInitialized) {
+    if (overlayVAO != 0) {
+      glDeleteVertexArrays(1, &overlayVAO);
+      overlayVAO = 0;
+    }
+    if (overlayVBO != 0) {
+      glDeleteBuffers(1, &overlayVBO);
+      overlayVBO = 0;
+    }
+    if (overlayShaderProgram != 0) {
+      glDeleteProgram(overlayShaderProgram);
+      overlayShaderProgram = 0;
+    }
+    overlayResourcesInitialized = false;
+  }
 }
