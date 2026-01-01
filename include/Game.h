@@ -230,6 +230,7 @@ public:
    * controlos e botão para iniciar.
    */
   void RenderIntroDialog();
+  void RenderPauseOverlay();
 
 private:
   // ========================================================================
@@ -262,6 +263,41 @@ private:
    * Deleta shader, VAO e VBO. Chamado no destrutor.
    */
   void CleanupOverlayResources();
+  
+  // ========================================================================
+  // MINIMAP RESOURCES
+  // ========================================================================
+  
+  /**
+   * @brief VAO (Vertex Array Object) para o minimapa
+   */
+  unsigned int minimapVAO;
+
+  /**
+   * @brief VBO (Vertex Buffer Object) para o minimapa
+   */
+  unsigned int minimapVBO;
+
+  /**
+   * @brief Shader usado para renderização 2D de cor sólida
+   * 
+   * Usado pelo minimapa para desenhar paredes, jogador e fundo
+   * sem texturas ou iluminação complexa.
+   */
+  class Shader *simpleShader; 
+  
+  /**
+   * @brief Renderiza o Minimapa 2D
+   *
+   * Desenha uma representação top-down do labirinto no canto
+   * superior direito do ecrã, mostrando:
+   * - Paredes (Preto)
+   * - Jogador (Vermelho)
+   * - Fundo (Cinzento escuro)
+   *
+   * @note Usa projeção ortográfica 2D.
+   */
+  void RenderMinimap();
 };
 
 #endif // GAME_H

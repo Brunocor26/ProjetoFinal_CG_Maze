@@ -153,6 +153,13 @@ O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/s
 
 O vertex shader (\texttt{shaders/maze\_vs.glsl}) transforma vértices e calcula posições para iluminação. O fragment shader (\texttt{shaders/maze\_fs.glsl}) implementa o modelo de iluminação de Phong modificado com características de spotlight.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/lighting_flashlight.png}
+    \caption{Efeito de lanterna (Spotlight) e atenuação da luz nas paredes do labirinto.}
+    \label{fig:lighting}
+\end{figure}
+
 \subsection{Networking Host/Cliente}
 O jogo suporta dois modos de execução:
 
@@ -184,14 +191,28 @@ Ao iniciar o jogo, é apresentado um diálogo com:
 
 Durante a apresentação do diálogo, a entrada de movimento é ignorada.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/intro_dialog.png}
+    \caption{Menu introdutório renderizado com FreeType sobre a cena 3D.}
+    \label{fig:intro}
+\end{figure}
+
 \subsection{Ambiente Exterior}
 Para além do labirinto, o jogo inclui:
 
 \begin{itemize}
     \item \textbf{Plano de relva}: Superfície texturizada que estende 10 células além do labirinto
     \item \textbf{Árvores procedurais}: Árvores simples compostas por tronco (cilindro) e copa (pirâmide)
-    \item \textbf{Portal de saída}: Estrutura arquitetônica com dois pilares e arco semicircular
+    \item \textbf{Portal de saída}: Esfera flutuante com efeito visual de "Mercúrio Líquido/Prata" (\textit{Liquid Silver}), gerado proceduralmente via shaders GLSL, que pulsa e brilha, atuando como o objetivo final do jogo.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/outdoor_trees.png}
+    \caption{Ambiente exterior mostrando as árvores procedurais e o portal ao fundo.}
+    \label{fig:outdoor}
+\end{figure}
 
 \subsection{Deteção de Colisões}
 O sistema de colisões verifica:
@@ -199,6 +220,7 @@ O sistema de colisões verifica:
     \item Interseção do jogador com paredes do labirinto
     \item Movimento é bloqueado em direções que causariam colisão
     \item Permite movimento deslizante ao longo de paredes
+    \item \textbf{Prevenção de Clipping}: Implementado um raio de colisão (\texttt{playerRadius = 0.3f}) em torno da câmara para impedir que o plano de visualização atravesse as esquinas das paredes.
 \end{itemize}
 
 \subsection{Sistema de Pausa}
@@ -208,6 +230,13 @@ Pressionando a tecla ESC:
     \item Cursor do rato torna-se visível (modo pausa)
     \item Movimento e rotação da câmara são bloqueados
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/pause_screen.png}
+    \caption{Overlay de Pausa renderizado quando o jogador pressiona ESC.}
+    \label{fig:pause}
+\end{figure}
 
 \subsection{Transição de Cor Progressiva}
 Uma feature adicional implementada é a transição gradual da cor do ambiente à medida que o jogador se aproxima do portal. Este efeito visual cria feedback atmosférico e ajuda o jogador a perceber a proximidade ao objetivo.
@@ -228,6 +257,24 @@ t = t^2(3 - 2t)
 
 Este \textit{smoothstep} garante uma transição visual suave, sem mudanças abruptas de cor.
 
+\subsection{Shader de Metal Líquido (Portal)}
+Para criar o efeito do portal "Mercúrio Líquido", foi implementado um shader procedural em GLSL que substitui a renderização de texturas padrão quando a flag \texttt{isPortal} está ativa.
+
+\textbf{Características do efeito}:
+\begin{itemize}
+    \item \textbf{Animação Procedural}: Combinação de três ondas sinusoidais (\texttt{sin/cos}) com frequências e fases diferentes, animadas pelo tempo (\texttt{uniform float time}), criando um padrão fluido e orgânico.
+    \item \textbf{Efeito Fresnel}: As bordas da esfera são iluminadas intensamente (efeito de borda/rim light) baseado no ângulo de visão (\texttt{dot(viewDir, normal)}), simulando um material metálico ou energético.
+    \item \textbf{Cores}: Mistura de uma base prateada azulada \texttt{(0.7, 0.75, 0.8)} com tons de branco puro nos picos das ondas e um leve brilho ciano nas bordas.
+    \item \textbf{Pulsação}: A intensidade global da cor oscila com o tempo, dando a impressão de um objeto "vivo".
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/portal_effect.png}
+    \caption{Renderização do Portal com efeito "Mercúrio Líquido" e iluminação Fresnel.}
+    \label{fig:portal_effect}
+\end{figure}
+
 \subsection{Texturas e Materiais}
 O jogo utiliza texturas PBR (Physically-Based Rendering) de alta qualidade (4K):
 
@@ -237,11 +284,40 @@ O jogo utiliza texturas PBR (Physically-Based Rendering) de alta qualidade (4K):
     \item \textbf{Exterior}: Textura de relva (Grass005)
 \end{itemize}
 
-\section{Documentação com Doxygen} \label{sec:impl_doxygen}
-O código está parcialmente documentado com comentários compatíveis com Doxygen. A classe \texttt{maze::kruskal} contém documentação Doxygen completa. Para gerar documentação HTML:
+\subsection{Minimapa (HUD)}
+Foi implementado um minimapa 2D no canto superior direito do ecrã para auxiliar a navegação do jogador.
 
+\textbf{Implementação Técnica}:
+\begin{itemize}
+    \item \textbf{Renderização}: Utiliza um shader simples (\texttt{simpleShader}) que desenha apenas cores sólidas, sem texturas ou iluminação.
+    \item \textbf{Projeção}: Usa uma matriz de projeção ortográfica (\texttt{glm::ortho}) para mapear coordenadas de ecrã (pixels) diretamente, ignorando a perspetiva 3D.
+    \item \textbf{Conteúdo}:
+    \begin{itemize}
+        \item \textbf{Fundo}: Retângulo cinzento escuro semi-transparente.
+        \item \textbf{Labirinto}: Itera sobre a estrutura de dados \texttt{grid} do labirinto e desenha quadrados pretos para cada parede.
+        \item \textbf{Jogador}: Um quadrado vermelho representa a posição atual da câmara, atualizada em tempo real.
+    \end{itemize}
+\end{itemize}
+
+O minimapa ignora o \textit{Depth Test} durante a sua renderização para garantir que aparece sempre sobreposta à cena 3D (HUD).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/minimap.png}
+    \caption{Interface de jogo com o Minimapa no canto superior direito, mostrando a posição do jogador (vermelho) e as paredes (preto).}
+    \label{fig:minimap}
+\end{figure}
+
+\section{Documentação com Doxygen} \label{sec:impl_doxygen}
+Todas as classes e ficheiros de cabeçalho do projeto foram documentados utilizando o formato Doxygen. Isto inclui descrições detalhadas de:
+\begin{itemize}
+    \item Classes principais (\texttt{Game}, \texttt{Maze}, \texttt{Camera})
+    \item Utilitários (\texttt{Objloader}, \texttt{Texture}, \texttt{TextRenderer})
+    \item Estruturas de dados e definições de tipos
+\end{itemize}
+
+A documentação HTML pode ser gerada executando o comando:
 \begin{lstlisting}[language=bash]
 doxygen Doxyfile
 \end{lstlisting}
-
-\textbf{Nota}: A documentação Doxygen completa para todas as classes é um objetivo de trabalho futuro.
+Esta documentação técnica facilita a manutenção futura e a compreensão da arquitetura por novos desenvolvedores.
