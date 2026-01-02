@@ -53,15 +53,16 @@ unsigned int loadTexture(char const *path);
  * @param width Window width in pixels
  * @param height Window height in pixels
  * @param gameMode Either HOST or CLIENT mode for networked gameplay
+ * @param hostIP IP address of the host for client connections
  */
-Game::Game(unsigned int width, unsigned int height, GameMode gameMode)
+Game::Game(unsigned int width, unsigned int height, GameMode gameMode, const std::string &hostIP)
     : Width(width), Height(height), currentMaze(nullptr), camera(nullptr),
       outdoorGroundMesh(nullptr), treeMesh(nullptr), gateMesh(nullptr),
       networkSocket(-1), connectedToPortal(false), portalPosition(0.0f),
       isPaused(false), windowPtr(nullptr), mode(gameMode),
       movementLocked(gameMode == GameMode::CLIENT), serverSocket(-1),
       clientSocket(-1), showingIntroDialog(true), textRenderer(nullptr),
-      inheritedColorTint(1.0f, 1.0f, 1.0f), overlayShaderProgram(0),
+      inheritedColorTint(1.0f, 1.0f, 1.0f), hostIP(hostIP), overlayShaderProgram(0),
       overlayVAO(0), overlayVBO(0), overlayResourcesInitialized(false),
       minimapVAO(0), minimapVBO(0), simpleShader(nullptr) {
 
@@ -140,9 +141,9 @@ void Game::Init() {
     // Create client socket
     networkSocket = Network::createSocket();
     if (networkSocket >= 0) {
-      std::cout << "Connecting to host at " << HOST << ":" << PORT << "..."
+      std::cout << "Connecting to host at " << hostIP << ":" << PORT << "..."
                 << std::endl;
-      if (Network::connectToServer(networkSocket, HOST, PORT)) {
+      if (Network::connectToServer(networkSocket, hostIP, PORT)) {
         std::cout << "Connected to host!" << std::endl;
       } else {
         std::cerr << "Failed to connect to host" << std::endl;

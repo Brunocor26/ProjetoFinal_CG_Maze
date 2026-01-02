@@ -94,6 +94,9 @@ public:
   /// Color tint inherited from HOST (CLIENT only)
   glm::vec3 inheritedColorTint;
 
+  /// Host IP address for client connections
+  std::string hostIP;
+
   // ========================================================================
   // GAME RESOURCES
   // ========================================================================
@@ -141,9 +144,11 @@ public:
    * @param width Window width in pixels
    * @param height Window height in pixels
    * @param gameMode Game mode (HOST or CLIENT), default is HOST
+   * @param hostIP IP address of the host (used in CLIENT mode), default is "127.0.0.1"
    */
   Game(unsigned int width, unsigned int height,
-       GameMode gameMode = GameMode::HOST);
+       GameMode gameMode = GameMode::HOST,
+       const std::string &hostIP = "127.0.0.1");
 
   /**
    * @brief Destructor - frees all allocated resources

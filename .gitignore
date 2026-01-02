@@ -1,5 +1,6 @@
-build
+build/
 docs/*.md
 docs/doxygen
 .cache
 .vscode
+CMakeCache.txt

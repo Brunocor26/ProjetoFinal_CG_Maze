@@ -15,8 +15,8 @@
 const unsigned int SCR_WIDTH = 800;  ///< Default window width
 const unsigned int SCR_HEIGHT = 600; ///< Default window height
 
-// Global Game instance - HOST MODE
-Game MazeGame(SCR_WIDTH, SCR_HEIGHT, GameMode::HOST);
+// Global Game instance - HOST MODE (initialized in main)
+Game *MazeGame = nullptr;
 
 // time variables
 float deltaTime = 0.0f; ///< Time between current frame and last frame
@@ -57,7 +57,17 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action,
  */
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
-int main() {
+int main(int argc, char *argv[]) {
+  // Create game instance in HOST mode
+  // Optional IP argument can be passed (for future use if needed)
+  std::string hostIP = "127.0.0.1";
+  if (argc > 1) {
+    hostIP = argv[1];
+    std::cout << "Host IP provided: " << hostIP << std::endl;
+  }
+
+  MazeGame = new Game(SCR_WIDTH, SCR_HEIGHT, GameMode::HOST, hostIP);
+
   // initialize and set up GLFW
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // OpenGL 3.3
@@ -96,10 +106,10 @@ int main() {
   glEnable(GL_DEPTH_TEST); // essencial for 3D
 
   // initialize game resources (Shaders, Models, Maze)
-  MazeGame.Init();
+  MazeGame->Init();
 
   // Store window pointer in Game for pause functionality
-  MazeGame.windowPtr = window;
+  MazeGame->windowPtr = window;
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -112,21 +122,22 @@ int main() {
     glfwPollEvents();
 
     // game logic
-    MazeGame.ProcessInput(deltaTime);
-    MazeGame.Update(deltaTime);
+    MazeGame->ProcessInput(deltaTime);
+    MazeGame->Update(deltaTime);
 
     // rendering
     // clean color and depth buffer
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f); // Sky blue background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    MazeGame.Render();
+    MazeGame->Render();
 
     // swap buffers
     glfwSwapBuffers(window);
   }
 
   // clean
+  delete MazeGame;
   glfwTerminate();
   return 0;
 }
@@ -149,9 +160,9 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action,
   // Atualizar o array de teclas da classe Game
   if (key >= 0 && key < 1024) {
     if (action == GLFW_PRESS)
-      MazeGame.Keys[key] = true;
+      MazeGame->Keys[key] = true;
     else if (action == GLFW_RELEASE)
-      MazeGame.Keys[key] = false;
+      MazeGame->Keys[key] = false;
   }
 }
 
@@ -172,5 +183,5 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
   lastX = xpos;
   lastY = ypos;
 
-  MazeGame.ProcessMouseMovement(xoffset, yoffset);
+  MazeGame->ProcessMouseMovement(xoffset, yoffset);
 }
