@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bruno/Desktop/ProjetoFinal_CG_Maze
+CMAKE_SOURCE_DIR = /home/bruno/Desktop/3Ano/CG/ProjetoFinal
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bruno/Desktop/ProjetoFinal_CG_Maze/build
+CMAKE_BINARY_DIR = /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -83,14 +83,14 @@ clean: CMakeFiles/maze_client.dir/clean
 CMakeFiles/maze_host.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_host.dir/build.make CMakeFiles/maze_host.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles --progress-num=10,11,12,13,14,15,16,17,18 "Built target maze_host"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=10,11,12,13,14,15,16,17,18 "Built target maze_host"
 .PHONY : CMakeFiles/maze_host.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/maze_host.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/maze_host.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles 0
 .PHONY : CMakeFiles/maze_host.dir/rule
 
 # Convenience name for target.
@@ -109,14 +109,14 @@ CMakeFiles/maze_host.dir/clean:
 CMakeFiles/maze_client.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/maze_client.dir/build.make CMakeFiles/maze_client.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target maze_client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target maze_client"
 .PHONY : CMakeFiles/maze_client.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/maze_client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/maze_client.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/ProjetoFinal_CG_Maze/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles 0
 .PHONY : CMakeFiles/maze_client.dir/rule
 
 # Convenience name for target.
