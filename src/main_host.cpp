@@ -95,6 +95,10 @@ int main(int argc, char *argv[]) {
 
   // tell GLFW to capture our mouse
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  
+  // Enable raw mouse motion for better control (especially in WSL)
+  if (glfwRawMouseMotionSupported())
+    glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
   // load GLAD
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
