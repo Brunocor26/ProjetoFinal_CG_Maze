@@ -17,7 +17,6 @@ find_package(Freetype REQUIRED)
 set(COMMON_SOURCES
     src/Game.cpp
     src/Maze.cpp
-    src/Objloader.cpp
     src/network.cpp
     src/TextRenderer.cpp
     src/glad.c

@@ -26,6 +26,16 @@ O projeto utiliza CMake para gestão da compilação. O ficheiro \texttt{CMakeLi
     \item Comandos personalizados para cópia de shaders e assets para o diretório de compilação
 \end{itemize}
 
+\subsection{Carregamento de Assets Portável}
+Para garantir que o jogo funciona corretamente em qualquer máquina, foi implementado um sistema de carregamento de assets portável.
+
+\begin{itemize}
+    \item O ficheiro \texttt{configuration/root\_directory.h.in} define uma variável \texttt{logl\_root} que aponta para o diretório de assets.
+    \item Esta variavel foi configurada para \texttt{"."} (diretório atual), o que permite que o jogo procure assets relativamente ao executável.
+    \item O CMake copia automaticamente as pastas \texttt{assets} e \texttt{shaders} para junto do executável na pasta \texttt{build}.
+    \item A classe \texttt{FileSystem} utiliza este caminho relativo para resolver todos os caminhos de ficheiros em tempo de execução.
+\end{itemize}
+
 A separação em dois executáveis permite executar o jogo em modo host e cliente simultaneamente para testar funcionalidades de rede.
 
 \section{Descrição do Código} \label{sec:impl_codigo}
@@ -55,7 +65,7 @@ A classe gere também o estado do jogo incluindo:
 A classe \texttt{Maze} (\texttt{src/Maze.cpp}, \texttt{include/Maze.h}) é responsável pela representação e renderização do labirinto. Principais funcionalidades:
 
 \begin{itemize}
-    \item \texttt{Generate(int width, int height)}: Gera um novo labirinto utilizando o algoritmo de Kruskal
+    \item \texttt{Generate(int width, int height)}: Gera um novo labirinto com recurso ao algoritmo de Kruskal
     \item \texttt{Draw(Shader \&shader)}: Renderiza paredes e chão do labirinto
     \item \texttt{IsWall(float x, float z)}: Deteção de colisões com paredes
     \item Armazena a grelha do labirinto (matriz 2D de inteiros)
@@ -204,7 +214,7 @@ Para além do labirinto, o jogo inclui:
 \begin{itemize}
     \item \textbf{Plano de relva}: Superfície texturizada que estende 10 células além do labirinto
     \item \textbf{Árvores procedurais}: Árvores simples compostas por tronco (cilindro) e copa (pirâmide)
-    \item \textbf{Portal de saída}: Esfera flutuante com efeito visual de "Mercúrio Líquido/Prata" (\textit{Liquid Silver}), gerado proceduralmente via shaders GLSL, que pulsa e brilha, atuando como o objetivo final do jogo.
+    \item \textbf{Portal de saída}: Esfera flutuante com efeito visual de "Mercúrio Líquido/Prata" (\textit{Liquid Silver}), gerado proceduralmente via shaders GLSL, que pulsa e brilha, e atua como o objetivo final do jogo.
 \end{itemize}
 
 \begin{figure}[h]
@@ -262,10 +272,10 @@ Para criar o efeito do portal "Mercúrio Líquido", foi implementado um shader p
 
 \textbf{Características do efeito}:
 \begin{itemize}
-    \item \textbf{Animação Procedural}: Combinação de três ondas sinusoidais (\texttt{sin/cos}) com frequências e fases diferentes, animadas pelo tempo (\texttt{uniform float time}), criando um padrão fluido e orgânico.
-    \item \textbf{Efeito Fresnel}: As bordas da esfera são iluminadas intensamente (efeito de borda/rim light) baseado no ângulo de visão (\texttt{dot(viewDir, normal)}), simulando um material metálico ou energético.
+    \item \textbf{Animação Procedural}: Combinação de três ondas sinusoidais (\texttt{sin/cos}) com frequências e fases diferentes, animadas pelo tempo (\texttt{uniform float time}), o que cria um padrão fluido e orgânico.
+    \item \textbf{Efeito Fresnel}: As bordas da esfera são iluminadas intensamente (efeito de borda/rim light) baseado no ângulo de visão (\texttt{dot(viewDir, normal)}), o que simula um material metálico ou energético.
     \item \textbf{Cores}: Mistura de uma base prateada azulada \texttt{(0.7, 0.75, 0.8)} com tons de branco puro nos picos das ondas e um leve brilho ciano nas bordas.
-    \item \textbf{Pulsação}: A intensidade global da cor oscila com o tempo, dando a impressão de um objeto "vivo".
+    \item \textbf{Pulsação}: A intensidade global da cor oscila com o tempo, o que dá a impressão de um objeto "vivo".
 \end{itemize}
 
 \begin{figure}[h]
@@ -290,7 +300,7 @@ Foi implementado um minimapa 2D no canto superior direito do ecrã para auxiliar
 \textbf{Implementação Técnica}:
 \begin{itemize}
     \item \textbf{Renderização}: Utiliza um shader simples (\texttt{simpleShader}) que desenha apenas cores sólidas, sem texturas ou iluminação.
-    \item \textbf{Projeção}: Usa uma matriz de projeção ortográfica (\texttt{glm::ortho}) para mapear coordenadas de ecrã (pixels) diretamente, ignorando a perspetiva 3D.
+    \item \textbf{Projeção}: Usa uma matriz de projeção ortográfica (\texttt{glm::ortho}) para mapear coordenadas de ecrã (pixels) diretamente, ignorando-se a perspetiva 3D.
     \item \textbf{Conteúdo}:
     \begin{itemize}
         \item \textbf{Fundo}: Retângulo cinzento escuro semi-transparente.

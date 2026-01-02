@@ -1,7 +1,19 @@
+/**
+ * @file TextRenderer.cpp
+ * @brief Implementation of the TextRenderer class
+ * @author Project CG - Maze Game
+ * @date 2025
+ */
+
 #include "../include/TextRenderer.h"
-#include <glm/ext/matrix_clip_space.hpp> // for glm::ortho
+#include <glm/ext/matrix_clip_space.hpp>
 #include <iostream>
 
+/**
+ * @brief Constructs a new Text Renderer object
+ * @param width Screen width
+ * @param height Screen height
+ */
 TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
   // Load and configure shader
   const char *vertexShaderSource = R"(
@@ -64,6 +76,11 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
                      GL_FALSE, &projection[0][0]);
 }
 
+/**
+ * @brief Pre-compiles a list of characters from the given font
+ * @param font Path to the font file
+ * @param fontSize Size of the font to load
+ */
 void TextRenderer::Load(std::string font, unsigned int fontSize) {
   // Clear any previously loaded characters
   this->Characters.clear();
@@ -128,6 +145,14 @@ void TextRenderer::Load(std::string font, unsigned int fontSize) {
   std::cout << "Font '" << font << "' loaded successfully!" << std::endl;
 }
 
+/**
+ * @brief Renders a string of text using the precompiled list of characters
+ * @param text The text string to render
+ * @param x Screen X position
+ * @param y Screen Y position
+ * @param scale Scaling factor
+ * @param color Text color (RGB)
+ */
 void TextRenderer::RenderText(std::string text, float x, float y, float scale,
                               glm::vec3 color) {
   // Activate corresponding render state
@@ -171,6 +196,12 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale,
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+/**
+ * @brief Calculates the width of a text string in pixels
+ * @param text The text to measure
+ * @param scale The scale factor to apply
+ * @return Total width in pixels
+ */
 float TextRenderer::CalculateTextWidth(std::string text, float scale) {
   float width = 0.0f;
   std::string::const_iterator c;

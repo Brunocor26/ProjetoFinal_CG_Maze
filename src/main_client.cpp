@@ -1,3 +1,10 @@
+/**
+ * @file main_client.cpp
+ * @brief Main entry point for the CLIENT application
+ * @author Project CG - Maze Game
+ * @date 2025
+ */
+
 #include "../include/glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -5,15 +12,15 @@
 #include "../include/Game.h"
 
 // Global Settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 800;  ///< Default window width
+const unsigned int SCR_HEIGHT = 600; ///< Default window height
 
 // Global Game instance - CLIENT MODE
 Game MazeGame(SCR_WIDTH, SCR_HEIGHT, GameMode::CLIENT);
 
 // time variables
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+float deltaTime = 0.0f; ///< Time between current frame and last frame
+float lastFrame = 0.0f; ///< Time of last frame
 
 // Mouse State
 bool firstMouse = true;
@@ -21,9 +28,33 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 
 // Callback functions
+/**
+ * @brief GLFW callback for window resize events
+ * @param window The window that received the event
+ * @param width The new window width
+ * @param height The new window height
+ */
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
+/**
+ * @brief GLFW callback for key events
+ * @param window The window that received the event
+ * @param key The keyboard key that was pressed or released
+ * @param scancode The system-specific scancode of the key
+ * @param action GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
+ * @param mode Bit field describing which modifier keys were held down
+ */
 void key_callback(GLFWwindow *window, int key, int scancode, int action,
                   int mode);
+
+/**
+ * @brief GLFW callback for mouse movement events
+ * @param window The window that received the event
+ * @param xpos The new cursor x-coordinate, relative to the left edge of the
+ * content area
+ * @param ypos The new cursor y-coordinate, relative to the top edge of the
+ * content area
+ */
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
 int main() {

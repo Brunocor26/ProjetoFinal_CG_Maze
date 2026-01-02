@@ -1,79 +1,21 @@
-/*
-  (C) 2019 David Lettier
-  lettier.com
-*/
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoords;
 
-#version 150
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-#define NUMBER_OF_LIGHTS 4
+out vec3 Normal;
+out vec3 FragPos;
+out vec2 TexCoord;
 
-uniform mat4 p3d_ModelViewMatrix;
-uniform mat4 p3d_ProjectionMatrix;
-uniform mat3 p3d_NormalMatrix;
-
-uniform struct p3d_LightSourceParameters
-  { vec4 color
-
-  ; vec4 ambient
-  ; vec4 diffuse
-  ; vec4 specular
-
-  ; vec4 position
-
-  ; vec3  spotDirection
-  ; float spotExponent
-  ; float spotCutoff
-  ; float spotCosCutoff
-
-  ; float constantAttenuation
-  ; float linearAttenuation
-  ; float quadraticAttenuation
-
-  ; vec3 attenuation
-
-  ; sampler2DShadow shadowMap
-
-  ; mat4 shadowViewMatrix
-  ;
-  } p3d_LightSource[NUMBER_OF_LIGHTS];
-
-in vec4 p3d_Vertex;
-in vec3 p3d_Normal;
-
-in vec4 p3d_Color;
-
-in vec2 p3d_MultiTexCoord0;
-in vec2 p3d_MultiTexCoord1;
-
-in vec3 p3d_Binormal;
-in vec3 p3d_Tangent;
-
-out vec4 vertexPosition;
-out vec4 vertexColor;
-
-out vec3 vertexNormal;
-out vec3 binormal;
-out vec3 tangent;
-
-out vec2 normalCoord;
-out vec2 diffuseCoord;
-
-out vec4 vertexInShadowSpaces[NUMBER_OF_LIGHTS];
-
-void main() {
-  vertexColor    = p3d_Color;
-  vertexPosition = p3d_ModelViewMatrix * p3d_Vertex;
-
-  vertexNormal = normalize(p3d_NormalMatrix * p3d_Normal);
-  binormal     = normalize(p3d_NormalMatrix * p3d_Binormal);
-  tangent      = normalize(p3d_NormalMatrix * p3d_Tangent);
-
-  normalCoord   = p3d_MultiTexCoord0;
-  diffuseCoord  = p3d_MultiTexCoord1;
-
-  for (int i = 0; i < p3d_LightSource.length(); ++i) {
-    vertexInShadowSpaces[i] = p3d_LightSource[i].shadowViewMatrix * vertexPosition;
-  }
-
-  gl_Position = p3d_ProjectionMatrix * vertexPosition;
+void main()
+{
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(model))) * aNormal;  
+    TexCoord = aTexCoords;
+    
+    gl_Position = projection * view * vec4(FragPos, 1.0);
 }

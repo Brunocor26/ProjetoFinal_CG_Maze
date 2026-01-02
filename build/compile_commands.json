@@ -19,12 +19,6 @@
 },
 {
   "directory": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/include -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/configuration -I/usr/include/freetype2 -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/Objloader.cpp.o -c /home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Objloader.cpp",
-  "file": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Objloader.cpp",
-  "output": "CMakeFiles/maze_host.dir/src/Objloader.cpp.o"
-},
-{
-  "directory": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/build",
   "command": "/usr/bin/g++  -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/include -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/configuration -I/usr/include/freetype2 -g -std=gnu++17 -o CMakeFiles/maze_host.dir/src/network.cpp.o -c /home/bruno/Desktop/ProjetoFinal_CG_Maze/src/network.cpp",
   "file": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/src/network.cpp",
   "output": "CMakeFiles/maze_host.dir/src/network.cpp.o"
@@ -70,12 +64,6 @@
   "command": "/usr/bin/g++  -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/include -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/configuration -I/usr/include/freetype2 -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/Maze.cpp.o -c /home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Maze.cpp",
   "file": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Maze.cpp",
   "output": "CMakeFiles/maze_client.dir/src/Maze.cpp.o"
-},
-{
-  "directory": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/build",
-  "command": "/usr/bin/g++  -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/include -I/home/bruno/Desktop/ProjetoFinal_CG_Maze/build/configuration -I/usr/include/freetype2 -g -std=gnu++17 -o CMakeFiles/maze_client.dir/src/Objloader.cpp.o -c /home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Objloader.cpp",
-  "file": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/src/Objloader.cpp",
-  "output": "CMakeFiles/maze_client.dir/src/Objloader.cpp.o"
 },
 {
   "directory": "/home/bruno/Desktop/ProjetoFinal_CG_Maze/build",

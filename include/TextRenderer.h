@@ -1,8 +1,8 @@
 #ifndef TEXT_RENDERER_H
 #define TEXT_RENDERER_H
 
+#include "glad/glad.h"
 #include <ft2build.h>
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include FT_FREETYPE_H
 
@@ -26,26 +26,26 @@ public:
   std::map<char, Character> Characters;
   /** @brief Shader used for text rendering */
   unsigned int TextShader;
-  
+
   /**
    * @brief Construct a new Text Renderer object.
-   * 
+   *
    * @param width Screen width.
    * @param height Screen height.
    */
   TextRenderer(unsigned int width, unsigned int height);
-  
+
   /**
    * @brief Pre-compiles a list of characters from the given font.
-   * 
+   *
    * @param font Path to the font file.
    * @param fontSize Size of the font to load.
    */
   void Load(std::string font, unsigned int fontSize);
-  
+
   /**
    * @brief Renders a string of text using the precompiled list of characters.
-   * 
+   *
    * @param text The text string to render.
    * @param x Screen X position.
    * @param y Screen Y position.
@@ -54,10 +54,10 @@ public:
    */
   void RenderText(std::string text, float x, float y, float scale,
                   glm::vec3 color = glm::vec3(1.0f));
-                  
+
   /**
    * @brief Calculates the width of a text string in pixels.
-   * 
+   *
    * @param text The text to measure.
    * @param scale The scale factor to apply.
    * @return float The total width in pixels.

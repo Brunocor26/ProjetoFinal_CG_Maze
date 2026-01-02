@@ -1,51 +1,51 @@
 /**
  * @file Shader.h
- * @brief Classe para gestão de shaders OpenGL
- * @author Projeto CG - Maze Game
+ * @brief Class for OpenGL shader management
+ * @author Project CG - Maze Game
  * @date 2025
  */
 
 #ifndef SHADER_H
 #define SHADER_H
 
+#include "glad/glad.h"
 #include <fstream>
-#include <glad/glad.h>
 #include <iostream>
 #include <sstream>
 #include <string>
 
 /**
- * @brief Classe para criar e gerir shaders OpenGL
+ * @brief Class creating and managing OpenGL shaders
  *
- * Facilita o carregamento, compilação e uso de shaders.
- * Suporta vertex e fragment shaders, com verificação de erros.
+ * Facilitates loading, compiling, and using shaders.
+ * Supports vertex and fragment shaders, with error checking.
  *
- * Fornece métodos para definir uniforms de vários tipos
+ * Provides methods to set uniforms of various types
  * (bool, int, float, vec2, vec3, mat4).
  *
- * @note O destrutor não liberta o programa shader. Para aplicações
- * mais complexas, considerar adicionar glDeleteProgram no destrutor.
+ * @note The destructor does not free the shader program. For more
+ * complex applications, consider adding glDeleteProgram in the destructor.
  */
 class Shader {
 public:
-  /// ID do programa shader OpenGL
+  /// OpenGL shader program ID
   unsigned int ID;
 
   /**
-   * @brief Construtor - carrega e compila shaders
+   * @brief Constructor - loads and compiles shaders
    *
-   * Lê os ficheiros de vertex e fragment shader, compila-os
-   * e faz link para criar o programa shader.
+   * Reads the vertex and fragment shader files, compiles them,
+   * and links them to create the shader program.
    *
-   * @param vertexPath Caminho para o ficheiro do vertex shader
-   * @param fragmentPath Caminho para o ficheiro do fragment shader
+   * @param vertexPath Path to the vertex shader file
+   * @param fragmentPath Path to the fragment shader file
    *
-   * @throws std::ifstream::failure se não conseguir ler os ficheiros
+   * @throws std::ifstream::failure if unable to read the files
    *
-   * @note Erros de compilação/linking são impressos no cout
+   * @note Compilation/linking errors are printed to cout
    */
   Shader(const char *vertexPath, const char *fragmentPath) {
-    // 1. Ler código dos shaders
+    // 1. Read shader code
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -68,13 +68,13 @@ public:
       vertexCode = vShaderStream.str();
       fragmentCode = fShaderStream.str();
     } catch (std::ifstream::failure &e) {
-      std::cout << "ERRO: Shader file não foi lido corretamente" << std::endl;
+      std::cout << "ERROR: Shader file not read successfully" << std::endl;
     }
 
     const char *vShaderCode = vertexCode.c_str();
     const char *fShaderCode = fragmentCode.c_str();
 
-    // 2. Compilar shaders
+    // 2. Compile shaders
     unsigned int vertex, fragment;
 
     // Vertex shader
@@ -89,81 +89,81 @@ public:
     glCompileShader(fragment);
     checkCompileErrors(fragment, "FRAGMENT");
 
-    // Programa de shader
+    // Shader program
     ID = glCreateProgram();
     glAttachShader(ID, vertex);
     glAttachShader(ID, fragment);
     glLinkProgram(ID);
     checkCompileErrors(ID, "PROGRAM");
 
-    // Eliminar shaders (já linkados)
+    // Delete shaders (already linked)
     glDeleteShader(vertex);
     glDeleteShader(fragment);
   }
 
   /**
-   * @brief Ativa este shader para renderização
+   * @brief Activates this shader for rendering
    *
-   * Chama glUseProgram com o ID deste shader.
-   * Todas as chamadas de renderização subsequentes usarão este shader.
+   * Calls glUseProgram with this shader's ID.
+   * All subsequent rendering calls will use this shader.
    */
   void use() { glUseProgram(ID); }
 
   /**
-   * @brief Define uniform booleano
-   * @param name Nome da variável uniform no shader
-   * @param value Valor booleano a definir
+   * @brief Sets boolean uniform
+   * @param name Name of the uniform variable in the shader
+   * @param value Boolean value to set
    */
   void setBool(const std::string &name, bool value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
   }
 
   /**
-   * @brief Define uniform inteiro
-   * @param name Nome da variável uniform no shader
-   * @param value Valor inteiro a definir
+   * @brief Sets integer uniform
+   * @param name Name of the uniform variable in the shader
+   * @param value Integer value to set
    */
   void setInt(const std::string &name, int value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
   }
 
   /**
-   * @brief Define uniform float
-   * @param name Nome da variável uniform no shader
-   * @param value Valor float a definir
+   * @brief Sets float uniform
+   * @param name Name of the uniform variable in the shader
+   * @param value Float value to set
    */
   void setFloat(const std::string &name, float value) const {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
   }
 
   /**
-   * @brief Define uniform vec2
-   * @param name Nome da variável uniform no shader
-   * @param x Componente X do vetor
-   * @param y Componente Y do vetor
+   * @brief Sets vec2 uniform
+   * @param name Name of the uniform variable in the shader
+   * @param x X component of the vector
+   * @param y Y component of the vector
    */
   void setVec2(const std::string &name, float x, float y) const {
     glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
   }
 
   /**
-   * @brief Define uniform vec3
-   * @param name Nome da variável uniform no shader
-   * @param x Componente X do vetor
-   * @param y Componente Y do vetor
-   * @param z Componente Z do vetor
+   * @brief Sets vec3 uniform
+   * @param name Name of the uniform variable in the shader
+   * @param x X component of the vector
+   * @param y Y component of the vector
+   * @param z Z component of the vector
    */
   void setVec3(const std::string &name, float x, float y, float z) const {
     glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
   }
 
   /**
-   * @brief Define uniform mat4 (matriz 4x4)
+   * @brief Sets mat4 uniform (4x4 matrix)
    *
-   * Usado para transformações (model, view, projection).
+   * Used for transformations (model, view, projection).
    *
-   * @param name Nome da variável uniform no shader
-   * @param value Ponteiro para array de 16 floats (matriz em column-major)
+   * @param name Name of the uniform variable in the shader
+   * @param value Pointer to array of 16 floats (column-major matrix)
    */
   void setMat4(const std::string &name, const float *value) const {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,
@@ -172,13 +172,13 @@ public:
 
 private:
   /**
-   * @brief Verifica erros de compilação/linking
+   * @brief Checks for compilation/linking errors
    *
-   * Imprime mensagens de erro detalhadas se a compilação
-   * ou linking falharem.
+   * Prints detailed error messages if compilation
+   * or linking fails.
    *
-   * @param shader ID do shader ou programa a verificar
-   * @param type Tipo de verificação ("VERTEX", "FRAGMENT" ou "PROGRAM")
+   * @param shader ID of the shader or program to check
+   * @param type Type of check ("VERTEX", "FRAGMENT" or "PROGRAM")
    */
   void checkCompileErrors(unsigned int shader, std::string type) {
     int success;
@@ -187,14 +187,14 @@ private:
       glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
       if (!success) {
         glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-        std::cout << "ERRO COMPILAÇÃO SHADER do tipo: " << type << "\n"
+        std::cout << "SHADER COMPILATION ERROR type: " << type << "\n"
                   << infoLog << std::endl;
       }
     } else {
       glGetProgramiv(shader, GL_LINK_STATUS, &success);
       if (!success) {
         glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-        std::cout << "ERRO LINKING PROGRAMA\n" << infoLog << std::endl;
+        std::cout << "PROGRAM LINKING ERROR\n" << infoLog << std::endl;
       }
     }
   }

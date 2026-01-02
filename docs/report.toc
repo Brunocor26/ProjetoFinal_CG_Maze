@@ -1,8 +1,9 @@
-\xpg@aux {variant=portuguese}{portuguese}
+\xpginauxfiletrue 
+\selectlanguage *[variant=portuguese]{portuguese}
 \contentsline {chapter}{Resumo}{iii}{section*.1}%
 \contentsline {chapter}{Índice}{v}{section*.3}%
-\contentsline {chapter}{Lista de Figuras}{vii}{section*.5}%
-\contentsline {chapter}{Lista de Tabelas}{ix}{section*.7}%
+\contentsline {chapter}{Lista de Figuras}{ix}{section*.5}%
+\contentsline {chapter}{Lista de Tabelas}{xi}{section*.7}%
 \contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}História e Enquadramento}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Motivação}{1}{section.1.2}%
@@ -22,27 +23,28 @@
 \contentsline {section}{\numberline {3.1}Gestão do Projeto}{7}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Estrutura de Diretórios}{7}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}Sistema de Compilação}{7}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Carregamento de Assets Portável}{8}{subsection.3.1.3}%
 \contentsline {section}{\numberline {3.2}Descrição do Código}{8}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Classe Game}{8}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Classe Maze}{8}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.2}Classe Maze}{9}{subsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.2.3}Classe Camera}{9}{subsection.3.2.3}%
 \contentsline {subsection}{\numberline {3.2.4}Classe Shader}{9}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}Geração de Labirinto: Algoritmo de Kruskal}{9}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.5}Geração de Labirinto: Algoritmo de Kruskal}{10}{subsection.3.2.5}%
 \contentsline {subsection}{\numberline {3.2.6}Classe TextRenderer}{10}{subsection.3.2.6}%
 \contentsline {subsection}{\numberline {3.2.7}Classe Mesh}{10}{subsection.3.2.7}%
-\contentsline {subsection}{\numberline {3.2.8}Módulo Network}{10}{subsection.3.2.8}%
+\contentsline {subsection}{\numberline {3.2.8}Módulo Network}{11}{subsection.3.2.8}%
 \contentsline {section}{\numberline {3.3}Funcionalidades Implementadas}{11}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Geração Procedural de Labirintos}{11}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}Sistema de Iluminação Dinâmica}{11}{subsection.3.3.2}%
 \contentsline {subsection}{\numberline {3.3.3}Networking Host/Cliente}{12}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Sistema de Diálogo Introdutório}{12}{subsection.3.3.4}%
-\contentsline {subsection}{\numberline {3.3.5}Ambiente Exterior}{12}{subsection.3.3.5}%
-\contentsline {subsection}{\numberline {3.3.6}Deteção de Colisões}{13}{subsection.3.3.6}%
-\contentsline {subsection}{\numberline {3.3.7}Sistema de Pausa}{13}{subsection.3.3.7}%
-\contentsline {subsection}{\numberline {3.3.8}Transição de Cor Progressiva}{14}{subsection.3.3.8}%
-\contentsline {subsection}{\numberline {3.3.9}Shader de Metal Líquido (Portal)}{15}{subsection.3.3.9}%
-\contentsline {subsection}{\numberline {3.3.10}Texturas e Materiais}{15}{subsection.3.3.10}%
-\contentsline {subsection}{\numberline {3.3.11}Minimapa (HUD)}{16}{subsection.3.3.11}%
+\contentsline {subsection}{\numberline {3.3.4}Sistema de Diálogo Introdutório}{13}{subsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.3.5}Ambiente Exterior}{13}{subsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.3.6}Deteção de Colisões}{14}{subsection.3.3.6}%
+\contentsline {subsection}{\numberline {3.3.7}Sistema de Pausa}{14}{subsection.3.3.7}%
+\contentsline {subsection}{\numberline {3.3.8}Transição de Cor Progressiva}{15}{subsection.3.3.8}%
+\contentsline {subsection}{\numberline {3.3.9}Shader de Metal Líquido (Portal)}{16}{subsection.3.3.9}%
+\contentsline {subsection}{\numberline {3.3.10}Texturas e Materiais}{16}{subsection.3.3.10}%
+\contentsline {subsection}{\numberline {3.3.11}Minimapa (HUD)}{17}{subsection.3.3.11}%
 \contentsline {section}{\numberline {3.4}Documentação com Doxygen}{17}{section.3.4}%
 \contentsline {chapter}{\numberline {4}Conclusão e Trabalho Futuro}{19}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Conclusão}{19}{section.4.1}%
@@ -51,3 +53,4 @@
 \contentsline {section}{\numberline {4.3}Trabalho Futuro}{20}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Considerações Finais}{21}{section.4.4}%
 \contentsline {chapter}{Bibliografia}{23}{section*.16}%
+\xpginauxfilefalse 
