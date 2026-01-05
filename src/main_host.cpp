@@ -107,7 +107,8 @@ int main(int argc, char *argv[]) {
   }
 
   // OpenGL Global settings
-  glEnable(GL_DEPTH_TEST); // essencial for 3D
+  glEnable(GL_DEPTH_TEST); // Essential for 3D
+
 
   // initialize game resources (Shaders, Models, Maze)
   MazeGame->Init();
@@ -147,21 +148,25 @@ int main(int argc, char *argv[]) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// IMPLEMENTAÇÃO DOS CALLBACKS
+// CALLBACK IMPLEMENTATIONS
+
 // ---------------------------------------------------------------------------------------------
 
-// Ajusta o Viewport quando a janela é redimensionada
+// Adjusts the viewport when the window is resized
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-// Captura as teclas e guarda no array de estado do Jogo
+// Captures keys and stores them in the Game state array
+
 void key_callback(GLFWwindow *window, int key, int scancode, int action,
                   int mode) {
   // ESC is now handled in Game::ProcessInput() for pause functionality
   // Removed: glfwSetWindowShouldClose(window, true);
 
-  // Atualizar o array de teclas da classe Game
+  // Update the Game class key array
+
   if (key >= 0 && key < 1024) {
     if (action == GLFW_PRESS)
       MazeGame->Keys[key] = true;

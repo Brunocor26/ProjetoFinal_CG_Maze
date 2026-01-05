@@ -7,57 +7,72 @@
 #include <string>
 #include <vector>
 
-// tirado do livro Learn OpenGL : cap. 20
+// Adapted from Learn OpenGL: cap. 20
 
-// Estrutura para um vértice
+
+// Vertex Structure
+
 /**
- * @brief Estrutura que representa um vértice 3D
+ * @brief Structure representing a 3D vertex
+
  */
 struct Vertex {
-  /// Posição do vértice no espaço 3D (x, y, z)
+  /// Vertex position in 3D space (x, y, z)
+
   glm::vec3 Position;
   
-  /// Vetor normal do vértice (para iluminação)
+  /// Normal vector (for lighting)
+
   glm::vec3 Normal;
   
-  /// Coordenadas de textura (u, v)
+  /// Texture coordinates (u, v)
+
   glm::vec2 TexCoords;
 };
 
 /**
- * @brief Classe que encapsula uma malha 3D (Mesh)
+ * @brief Class encapsulating a 3D Mesh
+
  *
- * Gere os dados geométricos (vértices, índices) e materiais (texturas)
- * de um objeto 3D. Responsável por configurar os buffers OpenGL (VAO, VBO, EBO)
- * e realizar o desenho (draw call).
+ * Manages geometric data (vertices, indices) and materials (textures)
+ * of a 3D object. Responsible for setting up OpenGL buffers (VAO, VBO, EBO)
+ * and performing the draw call.
+
  */
 class Mesh {
 public:
-  /// Lista de vértices da malha
+  /// List of mesh vertices
+
   std::vector<Vertex> vertices;
   
-  /// Lista de índices para desenho otimizado (EBO)
+  /// List of indices for optimized drawing (EBO)
+
   std::vector<unsigned int> indices;
   
-  /// Lista de texturas associadas à malha
+  /// List of textures associated with the mesh
+
   std::vector<Texture> textures;
 
   /**
-   * @brief Construtor da Mesh
+   * @brief Mesh Constructor
+
    * 
-   * @param vertices Vetor de vértices
-   * @param indices Vetor de índices
-   * @param textures Vetor de texturas
+   * @param vertices Vector of vertices
+   * @param indices Vector of indices
+   * @param textures Vector of textures
+
    */
   Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
        std::vector<Texture> textures) {
     this->vertices = vertices;
     this->indices = indices;
     this->textures = textures;
-    setupMesh(); // Configura os buffers
+    setupMesh(); // Configure buffers
+
   }
 
-  // Desenha a malha
+  // Draws the mesh
+
   void Draw(GLuint shaderProgram) {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
@@ -110,13 +125,16 @@ public:
 
     glBindVertexArray(VAO);
     if (!indices.empty()) {
-      // Desenha com índices se existirem
+      // Draw with indices if they exist
+
       glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     } else {
-      // Desenha array de vértices
+      // Draw vertex array
+
       glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     }
-    glBindVertexArray(0); // Desvincula VAO
+    glBindVertexArray(0); // Unbind VAO
+
 
     // always good practice to set everything back to defaults once configured.
     glActiveTexture(GL_TEXTURE0);
@@ -125,7 +143,8 @@ public:
 private:
   unsigned int VAO, VBO, EBO;
 
-  // Configura os buffers da malha (VAO, VBO, EBO)
+  // Configures mesh buffers (VAO, VBO, EBO)
+
   void setupMesh() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -143,10 +162,12 @@ private:
                    GL_STATIC_DRAW);
     }
 
-    // Atributo 0: Posição
+    // Attribute 0: Position
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
-    // Atributo 1: Normal
+    // Attribute 1: Normal
+
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                           (void *)offsetof(Vertex, Normal));
