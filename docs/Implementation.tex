@@ -31,7 +31,8 @@ Para garantir que o jogo funciona corretamente em qualquer máquina, foi impleme
 
 \begin{itemize}
     \item O ficheiro \texttt{configuration/root\_directory.h.in} define uma variável \texttt{logl\_root} que aponta para o diretório de assets.
-    \item Esta variavel foi configurada para \texttt{"."} (diretório atual), o que permite que o jogo procure assets relativamente ao executável.
+    \item Esta variável foi configurada para \texttt{"."} (diretório atual), o que permite que o jogo procure assets relativamente ao executável.
+
     \item O CMake copia automaticamente as pastas \texttt{assets} e \texttt{shaders} para junto do executável na pasta \texttt{build}.
     \item A classe \texttt{FileSystem} utiliza este caminho relativo para resolver todos os caminhos de ficheiros em tempo de execução.
 \end{itemize}
@@ -88,7 +89,8 @@ A classe \texttt{Shader} (\texttt{include/Shader.h}) encapsula a gestão de prog
 
 \begin{itemize}
     \item Carregamento e compilação de vertex e fragment shaders
-    \item Linking de programa shader
+    \item Ligação (\textit{linking}) de programa shader
+
     \item Métodos utilitários para definição de uniformes (matrizes, vetores, valores escalares)
     \item Validação de erros de compilação
 \end{itemize}
@@ -152,7 +154,8 @@ As funções de networking (\texttt{src/network.cpp}, \texttt{include/Network.h}
 Cada execução do jogo gera um labirinto único através do algoritmo de Kruskal. O tamanho do labirinto é configurável (atualmente 15x15 células).
 
 \subsection{Sistema de Iluminação Dinâmica}
-O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/spotlight}) através de shaders GLSL customizados:
+O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/spotlight}) através de shaders GLSL personalizados:
+
 
 \begin{itemize}
     \item \textbf{Spotlight}: A luz segue a posição e direção da câmara
@@ -162,6 +165,7 @@ O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/s
 \end{itemize}
 
 O vertex shader (\texttt{shaders/maze\_vs.glsl}) transforma vértices e calcula posições para iluminação. O fragment shader (\texttt{shaders/maze\_fs.glsl}) implementa o modelo de iluminação de Phong modificado com características de spotlight.
+
 
 \begin{figure}[h]
     \centering
@@ -205,6 +209,7 @@ Durante a apresentação do diálogo, a entrada de movimento é ignorada.
     \centering
     \includegraphics[width=0.7\textwidth]{figures/intro_dialog.png}
     \caption{Menu introdutório renderizado com FreeType sobre a cena 3D.}
+
     \label{fig:intro}
 \end{figure}
 
@@ -231,6 +236,7 @@ O sistema de colisões verifica:
     \item Movimento é bloqueado em direções que causariam colisão
     \item Permite movimento deslizante ao longo de paredes
     \item \textbf{Prevenção de Clipping}: Implementado um raio de colisão (\texttt{playerRadius = 0.3f}) em torno da câmara para impedir que o plano de visualização atravesse as esquinas das paredes.
+
 \end{itemize}
 
 \subsection{Sistema de Pausa}
@@ -249,7 +255,8 @@ Pressionando a tecla ESC:
 \end{figure}
 
 \subsection{Transição de Cor Progressiva}
-Uma feature adicional implementada é a transição gradual da cor do ambiente à medida que o jogador se aproxima do portal. Este efeito visual cria feedback atmosférico e ajuda o jogador a perceber a proximidade ao objetivo.
+Uma funcionalidade adicional implementada é a transição gradual da cor do ambiente à medida que o jogador se aproxima do portal. Este efeito visual cria feedback atmosférico e ajuda o jogador a perceber a proximidade ao objetivo.
+
 
 \textbf{Implementação}:
 \begin{itemize}
@@ -303,13 +310,15 @@ Foi implementado um minimapa 2D no canto superior direito do ecrã para auxiliar
     \item \textbf{Projeção}: Usa uma matriz de projeção ortográfica (\texttt{glm::ortho}) para mapear coordenadas de ecrã (pixels) diretamente, ignorando-se a perspetiva 3D.
     \item \textbf{Conteúdo}:
     \begin{itemize}
-        \item \textbf{Fundo}: Retângulo cinzento escuro semi-transparente.
+        \item \textbf{Fundo}: Retângulo cinzento escuro semitransparente.
+
         \item \textbf{Labirinto}: Itera sobre a estrutura de dados \texttt{grid} do labirinto e desenha quadrados pretos para cada parede.
         \item \textbf{Jogador}: Um quadrado vermelho representa a posição atual da câmara, atualizada em tempo real.
     \end{itemize}
 \end{itemize}
 
-O minimapa ignora o \textit{Depth Test} durante a sua renderização para garantir que aparece sempre sobreposta à cena 3D (HUD).
+O minimapa ignora o \textit{Depth Test} durante a sua renderização para garantir que aparece sempre sobreposto à cena 3D (HUD).
+
 
 \begin{figure}[h]
     \centering
@@ -327,7 +336,9 @@ Todas as classes e ficheiros de cabeçalho do projeto foram documentados utiliza
 \end{itemize}
 
 A documentação HTML pode ser gerada executando o comando:
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, numbers=none]
 doxygen Doxyfile
 \end{lstlisting}
-Esta documentação técnica facilita a manutenção futura e a compreensão da arquitetura por novos desenvolvedores.
+
+Esta documentação técnica facilita a manutenção futura e a compreensão da arquitetura por novos programadores.
+
