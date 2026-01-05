@@ -207,7 +207,21 @@ float TextRenderer::CalculateTextWidth(std::string text, float scale) {
   std::string::const_iterator c;
   for (c = text.begin(); c != text.end(); c++) {
     Character ch = Characters[*c];
-    width += (ch.Advance >> 6) * scale;
+    width += (ch.Advance / 64.0f) * scale;
   }
   return width;
+}
+
+
+/**
+ * @brief Updates the projection matrix when window is resized
+ * @param width New window width
+ * @param height New window height
+ */
+void TextRenderer::Resize(unsigned int width, unsigned int height) {
+  glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), 0.0f,
+                                    static_cast<float>(height));
+  glUseProgram(this->TextShader);
+  glUniformMatrix4fv(glGetUniformLocation(this->TextShader, "projection"), 1,
+                     GL_FALSE, &projection[0][0]);
 }

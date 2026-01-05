@@ -64,6 +64,14 @@ public:
    */
   float CalculateTextWidth(std::string text, float scale);
 
+  /**
+   * @brief Updates the projection matrix when window is resized
+   * 
+   * @param width New window width
+   * @param height New window height
+   */
+  void Resize(unsigned int width, unsigned int height);
+
 private:
   // Render state
   unsigned int VAO, VBO;

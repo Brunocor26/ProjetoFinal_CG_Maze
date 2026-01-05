@@ -56,7 +56,7 @@ unsigned int loadTexture(char const *path);
  * @param hostIP IP address of the host for client connections
  */
 Game::Game(unsigned int width, unsigned int height, GameMode gameMode, const std::string &hostIP)
-    : Width(width), Height(height), currentMaze(nullptr), camera(nullptr),
+    : Width(width), Height(height), WindowedWidth(width), WindowedHeight(height), currentMaze(nullptr), camera(nullptr),
       outdoorGroundMesh(nullptr), treeMesh(nullptr), gateMesh(nullptr),
       networkSocket(-1), connectedToPortal(false), portalPosition(0.0f),
       isPaused(false), windowPtr(nullptr), mode(gameMode),
@@ -684,6 +684,20 @@ void Game::Init() {
 }
 
 /**
+ * @brief Handles window resize events
+ * @param width New width
+ * @param height New height
+ */
+void Game::Resize(unsigned int width, unsigned int height) {
+  this->Width = width;
+  this->Height = height;
+  if(this->textRenderer){
+      this->textRenderer->Resize(width, height);
+  }
+}
+
+
+/**
  * Load Texture Helper Function
  * Loads an image file and creates an OpenGL texture with mipmaps
  * @param path File path to the texture image
@@ -801,6 +815,9 @@ void Game::ProcessInput(float dt) {
     // Dismiss intro dialog when ENTER is pressed
     if (enterPressed && !enterPressedLastFrame) {
       showingIntroDialog = false;
+      if (windowPtr) {
+          glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      }
       std::cout << "\n=== Game Started! ===" << std::endl;
     }
     enterPressedLastFrame = enterPressed;
@@ -811,6 +828,13 @@ void Game::ProcessInput(float dt) {
   // PAUSE/UNPAUSE HANDLING (ESC key)
   static bool escPressedLastFrame = false;
   bool escPressed = Keys[GLFW_KEY_ESCAPE];
+
+  // Enforce cursor hiding during gameplay (WSL fix)
+  if (windowPtr && !showingIntroDialog && !isPaused) {
+      if (glfwGetInputMode(windowPtr, GLFW_CURSOR) != GLFW_CURSOR_DISABLED) {
+          glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      }
+  }
 
   if (escPressed && !escPressedLastFrame && windowPtr) {
     // Toggle pause
@@ -838,14 +862,31 @@ void Game::ProcessInput(float dt) {
     if (monitor == nullptr) {
       // Currently in windowed mode - switch to fullscreen
       GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
-      const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
-      glfwSetWindowMonitor(windowPtr, primaryMonitor, 0, 0, mode->width,
-                           mode->height, mode->refreshRate);
-      std::cout << "Switched to FULLSCREEN mode" << std::endl;
+      if (primaryMonitor) {
+          const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+          if (mode) {
+             // Save current dimensions
+             WindowedWidth = Width;
+             WindowedHeight = Height;
+             
+             // Switch to fullscreen (using GLFW_DONT_CARE for refresh rate to be safe)
+             glfwSetWindowMonitor(windowPtr, primaryMonitor, 0, 0, mode->width,
+                                  mode->height, GLFW_DONT_CARE);
+             std::cout << "Switched to FULLSCREEN mode: " << mode->width << "x" << mode->height << std::endl;
+          } else {
+             std::cerr << "Failed to get video mode for primary monitor" << std::endl;
+          }
+      } else {
+          std::cerr << "Failed to find primary monitor" << std::endl;
+      }
     } else {
       // Currently in fullscreen - switch to windowed mode
-      glfwSetWindowMonitor(windowPtr, nullptr, 100, 100, Width, Height, 0);
-      std::cout << "Switched to WINDOWED mode" << std::endl;
+      // Restore previous size (or default if invalid)
+      unsigned int w = (WindowedWidth > 0) ? WindowedWidth : 800;
+      unsigned int h = (WindowedHeight > 0) ? WindowedHeight : 600;
+      
+      glfwSetWindowMonitor(windowPtr, nullptr, 100, 100, w, h, 0);
+      std::cout << "Switched to WINDOWED mode: " << w << "x" << h << std::endl;
     }
   }
   fPressedLastFrame = fPressed;
@@ -923,8 +964,8 @@ void Game::ProcessInput(float dt) {
  */
 void Game::ProcessMouseMovement(float xoffset, float yoffset,
                                 bool constrainPitch) {
-  // Ignore mouse input when game is paused
-  if (isPaused) {
+  // Ignore mouse input when game is paused or showing intro
+  if (isPaused || showingIntroDialog) {
     return;
   }
   // Delegate to camera's built-in mouse movement handler
@@ -1158,8 +1199,10 @@ void Game::RenderPauseOverlay() {
   glDrawArrays(GL_TRIANGLES, 0, 6);
 
   // Render centered "PAUSED" text
+  float sF = Height / 600.0f; // Scale Factor
+  
   std::string pausedText = "PAUSED";
-  float scale = 2.0f;
+  float scale = 2.0f * sF;
   float textWidth = textRenderer->CalculateTextWidth(pausedText, scale);
 
   float centerX = (Width - textWidth) / 2.0f;
@@ -1170,10 +1213,10 @@ void Game::RenderPauseOverlay() {
 
   // Instructions
   std::string subText = "Press ESC to Resume";
-  float subScale = 1.0f;
+  float subScale = 1.0f * sF;
   float subWidth = textRenderer->CalculateTextWidth(subText, subScale);
 
-  textRenderer->RenderText(subText, (Width - subWidth) / 2.0f, centerY - 50.0f,
+  textRenderer->RenderText(subText, (Width - subWidth) / 2.0f, centerY - (50.0f * sF),
                            subScale, glm::vec3(0.8f, 0.8f, 0.8f));
 
   // Restore state
@@ -1387,22 +1430,25 @@ void Game::RenderIntroDialog() {
   glDrawArrays(GL_TRIANGLES, 0, 6);
 
   // Now render text on top of the overlay
+  // Calculate responsive scale based on window height (baseline 600px)
+  float sF = Height / 600.0f; 
+
   float centerX = Width / 2.0f;
 
   // Title
   std::string title = "Maze: Escape from yourself";
-  float titleScale = 1.5f;
+  float titleScale = 1.5f * sF;
   float titleWidth = textRenderer->CalculateTextWidth(title, titleScale);
-  textRenderer->RenderText(title, (Width - titleWidth) / 2.0f, Height - 100.0f,
+  textRenderer->RenderText(title, (Width - titleWidth) / 2.0f, Height - (100.0f * sF),
                            titleScale, glm::vec3(1.0f, 1.0f, 1.0f));
 
   // Mode
   std::string modeText =
       (mode == GameMode::HOST) ? "MODE: HOST" : "MODE: CLIENT";
-  float modeScale = 1.0f;
+  float modeScale = 1.0f * sF;
   float modeWidth = textRenderer->CalculateTextWidth(modeText, modeScale);
   textRenderer->RenderText(modeText, (Width - modeWidth) / 2.0f,
-                           Height - 150.0f, modeScale,
+                           Height - (150.0f * sF), modeScale,
                            glm::vec3(0.8f, 0.8f, 1.0f));
 
   // Objective
@@ -1414,38 +1460,53 @@ void Game::RenderIntroDialog() {
     objectiveText = "Do you still feel like you are the same man? Is this "
                     "still the same river?";
   }
-  float objScale = 0.6f; // Smaller to fit
+  float objScale = 0.6f * sF; // Maintain relative size
   float objWidth = textRenderer->CalculateTextWidth(objectiveText, objScale);
   textRenderer->RenderText(objectiveText, (Width - objWidth) / 2.0f,
-                           Height - 200.0f, objScale,
+                           Height - (200.0f * sF), objScale,
                            glm::vec3(0.9f, 0.9f, 0.9f));
 
   // Controls
   std::string controlsTitle = "CONTROLS:";
+  float controlsScale = 1.0f * sF;
   float controlsTitleWidth =
-      textRenderer->CalculateTextWidth(controlsTitle, 1.0f);
+      textRenderer->CalculateTextWidth(controlsTitle, controlsScale);
   textRenderer->RenderText(controlsTitle, (Width - controlsTitleWidth) / 2.0f,
-                           Height - 280.0f, 1.0f, glm::vec3(1.0f, 0.9f, 0.5f));
+                           Height - (280.0f * sF), controlsScale, glm::vec3(1.0f, 0.9f, 0.5f));
 
   std::string c1 = "WASD / Arrow Keys - Move";
-  float c1Width = textRenderer->CalculateTextWidth(c1, 0.7f);
-  textRenderer->RenderText(c1, (Width - c1Width) / 2.0f, Height - 320.0f, 0.7f,
+  float c1Scale = 0.7f * sF;
+  float c1Width = textRenderer->CalculateTextWidth(c1, c1Scale);
+  textRenderer->RenderText(c1, (Width - c1Width) / 2.0f, Height - (320.0f * sF), c1Scale,
                            glm::vec3(0.9f, 0.9f, 0.9f));
 
   std::string c2 = "Mouse - Look Around";
-  float c2Width = textRenderer->CalculateTextWidth(c2, 0.7f);
-  textRenderer->RenderText(c2, (Width - c2Width) / 2.0f, Height - 350.0f, 0.7f,
+  float c2Scale = 0.7f * sF;
+  float c2Width = textRenderer->CalculateTextWidth(c2, c2Scale);
+  textRenderer->RenderText(c2, (Width - c2Width) / 2.0f, Height - (350.0f * sF), c2Scale,
                            glm::vec3(0.9f, 0.9f, 0.9f));
 
-  std::string c3 = "ESC - Pause/Resume";
-  float c3Width = textRenderer->CalculateTextWidth(c3, 0.7f);
-  textRenderer->RenderText(c3, (Width - c3Width) / 2.0f, Height - 380.0f, 0.7f,
+  std::string c3 = "F - Toggle Fullscreen";
+  float c3Scale = 0.7f * sF;
+  float c3Width = textRenderer->CalculateTextWidth(c3, c3Scale);
+  textRenderer->RenderText(c3, (Width - c3Width) / 2.0f, Height - (380.0f * sF), c3Scale,
+                           glm::vec3(0.9f, 0.9f, 0.9f));
+
+  std::string c4 = "ESC - Pause/Resume";
+  float c4Scale = 0.7f * sF;
+  float c4Width = textRenderer->CalculateTextWidth(c4, c4Scale);
+  textRenderer->RenderText(c4, (Width - c4Width) / 2.0f, Height - (410.0f * sF), c4Scale,
                            glm::vec3(0.9f, 0.9f, 0.9f));
 
   // Instruction to start
   std::string startText = "Press ENTER to Start";
-  float startWidth = textRenderer->CalculateTextWidth(startText, 1.0f);
-  textRenderer->RenderText(startText, (Width - startWidth) / 2.0f, 100.0f, 1.0f,
+  float startScale = 1.0f * sF;
+  float startWidth = textRenderer->CalculateTextWidth(startText, startScale);
+  
+  float time = (float)glfwGetTime();
+  float alpha = (sin(time * 3.0f) + 1.0f) / 2.0f; // Blink effect
+
+  textRenderer->RenderText(startText, (Width - startWidth) / 2.0f, 50.0f * sF, startScale,
                            glm::vec3(0.5f, 1.0f, 0.5f));
 
   // Restore previous OpenGL state

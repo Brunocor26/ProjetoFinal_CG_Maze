@@ -65,6 +65,10 @@ public:
 
   /// Window height in pixels
   unsigned int Height;
+  
+  // Storage for windowed mode dimensions
+  unsigned int WindowedWidth;
+  unsigned int WindowedHeight;
 
   // ========================================================================
   // NETWORKING
@@ -236,6 +240,13 @@ public:
    */
   void RenderIntroDialog();
   void RenderPauseOverlay();
+
+  /**
+   * @brief Handles window resize events
+   * @param width New width
+   * @param height New height
+   */
+  void Resize(unsigned int width, unsigned int height);
 
 private:
   // ========================================================================

@@ -87,6 +87,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
   glfwMakeContextCurrent(window);
+  glfwSwapInterval(0); // Disable V-Sync for lower input latency
 
   // register callbacks
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -97,8 +98,9 @@ int main(int argc, char *argv[]) {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   // Enable raw mouse motion for better control (especially in WSL)
-  if (glfwRawMouseMotionSupported())
-    glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+  // DISABLED for WSLg compatibility (often causes jitter/lag)
+  // if (glfwRawMouseMotionSupported())
+  //   glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
   // load GLAD
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -153,6 +155,9 @@ int main(int argc, char *argv[]) {
 // Ajusta o Viewport quando a janela é redimensionada
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
+  if (MazeGame) {
+    MazeGame->Resize(width, height);
+  }
 }
 
 // Captura as teclas e guarda no array de estado do Jogo
