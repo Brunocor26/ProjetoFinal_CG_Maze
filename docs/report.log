@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2025.11.28)  2 JAN 2026 16:54
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2025.11.28)  5 JAN 2026 17:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -802,10 +802,26 @@ Package: makeidx 2021/10/04 v1.0m Standard LaTeX package
 \c@table=\count337
 \bibindent=\dimen275
 )
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks43
+\inpenc@posthook=\toks44
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
+2.
+
+(/usr/share/texmf/tex/latex/lm/t1lmr.fd
+File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+))
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count338
 \lst@gtempboxa=\box72
-\lst@token=\toks43
+\lst@token=\toks45
 \lst@length=\count339
 \lst@currlwidth=\dimen276
 \lst@column=\count340
@@ -862,40 +878,40 @@ Writing index file report.idx
 (./Conclusion.aux))
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 5
-4.
+7.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Info: Redefining \celsius on input line 54.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 54.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Info: Redefining \celsius on input line 57.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 57.
 
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 54.
-Package gensymb Info: Using \Omega for \ohm on input line 54.
+LaTeX Info: Redefining \ohm on input line 57.
+Package gensymb Info: Using \Omega for \ohm on input line 57.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -938,7 +954,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 54.
+Package hyperref Info: Link coloring OFF on input line 57.
 (./report.out) (./report.out)
 \@outlinefile=\write4
 \openout4 = `report.out'.
@@ -949,60 +965,60 @@ Package fontspec Info: Adjusting the maths setup (use [no-math] to avoid
 
 \symlegacymaths=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 54.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 54.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 54.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 54.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 54.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 54.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 54.
-LaTeX Font Info:    Redeclaring math accent \check on input line 54.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 54.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 54.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 54.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 54.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 54.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 57.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 57.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 57.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 57.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 57.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 57.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 57.
+LaTeX Font Info:    Redeclaring math accent \check on input line 57.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 57.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 57.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 57.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 57.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 54.
+(Font)              `operators' in the math version `normal' on input line 57.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 54.
+(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 57.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 54.
+(Font)              `operators' in the math version `bold' on input line 57.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 54.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 57.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 54.
+(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 54.
+(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 54.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 54.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 54.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 57.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 54.
+(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 54.
+(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 54.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 57.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 54.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 57.
 
 
 LaTeX Warning: \include should only be used after \begin{document} on input lin
-e 54.
+e 57.
 
 (./template-ubi/CoverPage.tex
 
@@ -1033,9 +1049,9 @@ File: images/logo_ubi_vprincipal.png Graphic file (type bmp)
 \c@lstlisting=\count346
 Package polyglossia Info: Option: portuguese, variant=portuguese.
 Package polyglossia Info: Option: portuguese, variant=portuguese.
-LaTeX Info: Redefining \rmfamily on input line 54.
-LaTeX Info: Redefining \sffamily on input line 54.
-LaTeX Info: Redefining \ttfamily on input line 54.
+LaTeX Info: Redefining \rmfamily on input line 57.
+LaTeX Info: Redefining \sffamily on input line 57.
+LaTeX Info: Redefining \ttfamily on input line 57.
 Package polyglossia Info: Option: portuguese, variant=portuguese.
 Package polyglossia Info: Option: portuguese, variant=portuguese.
  [3] [4
@@ -1148,29 +1164,34 @@ Capítulo 2.
 
 
 
-] [4]) [5]
+]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
+4.
+ (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [4]) [5]
 \openout2 = `Implementation.aux'.
 
- (./Implementation.tex [6
+ (./Implementation.tex
+[6
 
 
 
 
 ]
 Capítulo 3.
-[7] [8] [9] [10]
+[7] [8] [9] [10] [11]
 File: figures/lighting_flashlight.png Graphic file (type bmp)
 <figures/lighting_flashlight.png>
+ [12]
+File: figures/intro_dialog.png Graphic file (type bmp)
+<figures/intro_dialog.png>
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11] [12]
-File: figures/intro_dialog.png Graphic file (type bmp)
-<figures/intro_dialog.png>
 File: figures/outdoor_trees.png Graphic file (type bmp)
 <figures/outdoor_trees.png>
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1181,26 +1202,22 @@ File: figures/pause_screen.png Graphic file (type bmp)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[14]
-Underfull \vbox (badness 1681) has occurred while \output is active []
-
- [15]
+[14] [15]
 File: figures/portal_effect.png Graphic file (type bmp)
 <figures/portal_effect.png>
-
-[16]
-File: figures/minimap.png Graphic file (type bmp)
-<figures/minimap.png>
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+[16]
+File: figures/minimap.png Graphic file (type bmp)
+<figures/minimap.png>
+ [17] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
-)) [17] [18]
+)) [18]
 \openout2 = `Conclusion.aux'.
 
 
@@ -1220,15 +1237,9 @@ Capítulo 4.
 \openout8 = `report.brf'.
 
 
-Underfull \hbox (badness 1502) in paragraph at lines 29--29
-[]\TU/lmr/m/n/10.95 Comunidade UBI, “Template L[]T[]X UBI - template não oficia
-l para teses e
- []
-
-
-Underfull \hbox (badness 2809) in paragraph at lines 58--58
-[]\TU/lmr/m/n/10.95 F. Nemeth, “Maze generation algorithms,” []$[][][][][] [] [
-] [] [][][][][][] [] [][][] [] [][][][][][][][][][][][][][] []
+Underfull \hbox (badness 2970) in paragraph at lines 62--62
+[]\T1/lmr/m/n/10.95 F. Ne-meth, ``Maze ge-ne-ra-tion al-go-rithms,'' []$https :
+ / / github . com / ferenc-[]nemeth /
  []
 
 )
@@ -1240,17 +1251,17 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 7E32E798BA8D356806B3A159C574A084;7955.
+(rerunfilecheck)             Checksum: D6A28AF598288221B47E5A5E71D8CB72;7976.
 Package rerunfilecheck Info: File `report.brf' has not changed.
-(rerunfilecheck)             Checksum: 07CF77490BE4C418130F9BA78CC8BFFA;358.
+(rerunfilecheck)             Checksum: F691FFD1EEC4D5C9579910D4B66E47F6;405.
  ) 
 Here is how much of TeX's memory you used:
- 21004 strings out of 474878
- 401309 string characters out of 5762515
- 1930627 words of memory out of 5000000
- 42649 multiletter control sequences out of 15000+600000
- 565395 words of font info for 80 fonts, out of 8000000 for 9000
+ 21107 strings out of 474878
+ 403076 string characters out of 5762515
+ 1926627 words of memory out of 5000000
+ 42745 multiletter control sequences out of 15000+600000
+ 609225 words of font info for 86 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 140i,12n,145p,580b,1163s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 140i,12n,145p,580b,1133s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on report.pdf (35 pages).

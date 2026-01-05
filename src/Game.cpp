@@ -1083,8 +1083,7 @@ void Game::Render() {
       gameShader->setBool("isPortal", true); // Use custom shader logic
       gameShader->setFloat("time", (float)glfwGetTime());
 
-      // Force environment tint to WHITE for the portal so it looks silver, not
-      // purple
+      // Force environment tint to WHITE for the portal so it looks silver
       gameShader->setVec3("environmentTint", 1.0f, 1.0f, 1.0f);
 
       // Animation Variables
@@ -1346,7 +1345,7 @@ glm::vec3 Game::GetEnvironmentTint() {
   float t = glm::clamp(1.0f - (distance / maxDistance), 0.0f, 1.0f);
 
   // Apply smoothstep for smooth interpolation
-  t = t * t * (3.0f - 2.0f * t);
+  t = glm::smoothstep(0.0f, 1.0f, t);
 
   // Define colors
   glm::vec3 normalColor(1.0f, 1.0f, 1.0f); // White/neutral

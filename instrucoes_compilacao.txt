@@ -1,0 +1,13 @@
+cmake .
+make
+./maze_host
+./maze_client (se for noutro computador, passa o IP do host como argumento, se for no mesmo pc nao é necessário)
+
+
+Para algo mais "clean" (fica tudo numa pasta build/):
+mkdir build
+cd build
+cmake ..
+make
+./maze_host
+./maze_client

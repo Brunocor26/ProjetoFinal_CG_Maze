@@ -1,4 +1,0 @@
-/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles/maze_host.dir
-/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles/maze_client.dir
-/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles/edit_cache.dir
-/home/bruno/Desktop/3Ano/CG/ProjetoFinal/build/CMakeFiles/rebuild_cache.dir

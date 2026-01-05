@@ -1,4 +1,0 @@
-// Path relative to the executable (assumes executable is in the `build/` dir)
-// Use an environment variable `LOGL_ROOT_PATH` to override at runtime if
-// needed.
-const char *logl_root = ".";

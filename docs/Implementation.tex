@@ -4,7 +4,7 @@ Este capítulo descreve a gestão do projeto, a arquitetura do código, e as pri
 
 \section{Gestão do Projeto} \label{sec:impl_gestao}
 
-\subsection{Estrutura de Diretórios}
+\subsection{Estrutura de Diretorias}
 O projeto está organizado da seguinte forma:
 
 \begin{itemize}
@@ -12,7 +12,7 @@ O projeto está organizado da seguinte forma:
     \item \texttt{include/}: Ficheiros de cabeçalho (.h, .hpp)
     \item \texttt{shaders/}: Shaders GLSL (vertex e fragment shaders)
     \item \texttt{assets/}: Recursos (texturas, fontes)
-    \item \texttt{build/}: Diretório de compilação (gerado pelo CMake)
+    \item \texttt{build/}: Diretoria de compilação (gerado pelo CMake)
     \item \texttt{docs/}: Documentação do projeto
 \end{itemize}
 
@@ -21,17 +21,17 @@ O projeto utiliza CMake para gestão da compilação. O ficheiro \texttt{CMakeLi
 
 \begin{itemize}
     \item Dependências externas (GLFW, FreeType, OpenGL)
-    \item Dois executáveis distintos: \texttt{maze\_host.exe} e \texttt{maze\_client.exe}
+    \item Dois executáveis distintos: \texttt{maze\_host} e \texttt{maze\_client}
     \item Ficheiros fonte comuns partilhados entre ambos os executáveis
-    \item Comandos personalizados para cópia de shaders e assets para o diretório de compilação
+    \item Comandos personalizados para cópia de shaders e assets para o Diretoria de compilação
 \end{itemize}
 
 \subsection{Carregamento de Assets Portável}
 Para garantir que o jogo funciona corretamente em qualquer máquina, foi implementado um sistema de carregamento de assets portável.
 
 \begin{itemize}
-    \item O ficheiro \texttt{configuration/root\_directory.h.in} define uma variável \texttt{logl\_root} que aponta para o diretório de assets.
-    \item Esta variável foi configurada para \texttt{"."} (diretório atual), o que permite que o jogo procure assets relativamente ao executável.
+    \item O ficheiro \texttt{configuration/root\_directory.h.in} define uma variável \texttt{logl\_root} que aponta para o Diretoria de assets.
+    \item Esta variável foi configurada para \texttt{"."} (Diretoria atual), o que permite que o jogo procure assets relativamente ao executável.
 
     \item O CMake copia automaticamente as pastas \texttt{assets} e \texttt{shaders} para junto do executável na pasta \texttt{build}.
     \item A classe \texttt{FileSystem} utiliza este caminho relativo para resolver todos os caminhos de ficheiros em tempo de execução.
@@ -40,6 +40,8 @@ Para garantir que o jogo funciona corretamente em qualquer máquina, foi impleme
 A separação em dois executáveis permite executar o jogo em modo host e cliente simultaneamente para testar funcionalidades de rede.
 
 \section{Descrição do Código} \label{sec:impl_codigo}
+
+\textbf{Nota de Atribuição}: As classes base para gestão de Shaders, Câmara, Mesh e sistema de ficheiros foram adaptadas a partir dos tutoriais e código disponibilizado pelo portal \textit{LearnOpenGL} \cite{LearnOpenGL}. Estas classes fornecem uma abstração robusta sobre as primitivas do OpenGL, o que permitiu focar o desenvolvimento na lógica específica do jogo e na geração procedural.
 
 \subsection{Classe Game}
 A classe \texttt{Game} é o núcleo da aplicação, responsável pela gestão do ciclo de vida do jogo. Localizada em \texttt{src/Game.cpp} e \texttt{include/Game.h}, implementa os seguintes métodos principais:
@@ -164,7 +166,7 @@ O jogo implementa um sistema de iluminação tipo lanterna (\textit{flashlight/s
     \item \textbf{Fog Effect}: Névoa atmosférica que esconde geometria distante
 \end{itemize}
 
-O vertex shader (\texttt{shaders/maze\_vs.glsl}) transforma vértices e calcula posições para iluminação. O fragment shader (\texttt{shaders/maze\_fs.glsl}) implementa o modelo de iluminação de Phong modificado com características de spotlight.
+O vertex shader (\texttt{shaders/blinn\_phong.vert}) transforma vértices e calcula posições para iluminação. O fragment shader (\texttt{shaders/blinn\_phong.frag}) implementa o modelo de iluminação de \textbf{Blinn-Phong}, que utiliza o vetor \textit{halfway} para reflexões especulares mais realistas e eficientes, integrando ainda características de spotlight.
 
 
 \begin{figure}[h]
@@ -272,7 +274,7 @@ A função \texttt{GetEnvironmentTint()} calcula o fator de interpolação usand
 t = t^2(3 - 2t)
 \end{equation}
 
-Este \textit{smoothstep} garante uma transição visual suave, sem mudanças abruptas de cor.
+Este \textit{smoothstep} garante uma transição visual suave, sem mudanças abruptas de cor. Antes era feita a formula à mão, mas agora usamos a função \texttt{glm::smoothstep}.
 
 \subsection{Shader de Metal Líquido (Portal)}
 Para criar o efeito do portal "Mercúrio Líquido", foi implementado um shader procedural em GLSL que substitui a renderização de texturas padrão quando a flag \texttt{isPortal} está ativa.

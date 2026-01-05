@@ -24,7 +24,7 @@
 \bibitem{template-ubi-latex}
 {Comunidade UBI}, ``{Template \LaTeX\ UBI} - template não oficial para teses e
   dissertações da universidade da beira interior,''
-  \url{https://github.com/detiuaveiro/template-ubi-latex}, accessed:
+  \url{https://github.com/manoelcampos/template-ubi-latex}, accessed:
   2025-12-22.
 
 \bibitem{OpenGL}
@@ -50,6 +50,10 @@ S.~Barrett, ``{stb} - single-file public domain libraries for c/c++,''
 \bibitem{CMake}
 {Kitware}, ``{CMake} - cross-platform make,'' \url{https://cmake.org/},
   accessed: 2025-12-22.
+
+\bibitem{LearnOpenGL}
+J.~de~Vries, ``{LearnOpenGL} - learn modern opengl graphics programming,''
+  \url{https://learnopengl.com/}, accessed: 2025-12-22.
 
 \bibitem{MazeAlgorithms}
 F.~Nemeth, ``Maze generation algorithms,''

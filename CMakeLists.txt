@@ -25,7 +25,7 @@ set(COMMON_SOURCES
 )
 
 # ==========================================
-# Target: maze_host.exe (HOST MODE)
+# Target: maze_host (HOST MODE)
 # ==========================================
 add_executable(maze_host
     src/main_host.cpp
@@ -34,11 +34,11 @@ add_executable(maze_host
 
 set_target_properties(maze_host PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_NAME "maze_host.exe"
+    OUTPUT_NAME "maze_host"
 )
 
 # ==========================================
-# Target: maze_client.exe (CLIENT MODE)
+# Target: maze_client (CLIENT MODE)
 # ==========================================
 add_executable(maze_client
     src/main_client.cpp
@@ -47,7 +47,7 @@ add_executable(maze_client
 
 set_target_properties(maze_client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_NAME "maze_client.exe"
+    OUTPUT_NAME "maze_client"
 )
 
 # Configure the root directory header (for finding assets)
